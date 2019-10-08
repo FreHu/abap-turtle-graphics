@@ -1,6 +1,6 @@
 # abap-turtle-graphics
 
-Simple turtle graphics library for abap intended for business-oriented children or bored adults. First version.
+Enterprise-grade turtle graphics library for abap intended for business-oriented children or bored adults. First version.
 
 ## Usage example
 ```abap
