@@ -1,5 +1,4 @@
 # abap-turtle-graphics
-Turtle graphics for abap
 
 Simple turtle graphics library for abap intended for business-oriented children or bored adults. First version.
 
