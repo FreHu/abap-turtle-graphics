@@ -1,8 +1,11 @@
 # abap-turtle-graphics
 
-Enterprise-grade turtle graphics library for abap intended for business-oriented children or bored adults. First version.
+Enterprise-grade turtle graphics library for abap intended for business-oriented children or bored adults. 
+
+The graphics are generated in the svg format. 
 
 ## Usage example
+
 ```abap
 REPORT zabapturtle.
 
@@ -27,3 +30,27 @@ turtle->show( ).
 ```
 
 ![image](https://user-images.githubusercontent.com/5097067/66410268-2003fb00-e9f2-11e9-94a5-fc764b461932.png)
+
+see `zcl_turtle_examples` for more
+
+## Supports
+
+movement:
+
+- forward, back
+- left,right (rotate by x degrees)
+
+svg primitives:
+
+- line
+- circle
+- polyline
+- polygon
+- text
+
+styling:
+
+- stroke width
+- stroke color
+- fill color
+
