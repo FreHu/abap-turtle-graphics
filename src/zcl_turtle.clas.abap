@@ -82,7 +82,7 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
 
 
   METHOD circle.
-    svg &&= |<circle cx="{ center_x }" cy="{ center_y }" r="{ radius }" |
+    svg = svg && |<circle cx="{ center_x }" cy="{ center_y }" r="{ radius }" |
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }" fill="{ pen-fill_color }"/>|.
     turtle = me.
   ENDMETHOD.
@@ -100,8 +100,8 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
 
 
   METHOD forward.
-    DATA(new_x) = how_far * cos( degrees_to_radians( CONV f( me->current_angle ) ) ).
-    DATA(new_y) = how_far * sin( degrees_to_radians( CONV f( me->current_angle ) ) ).
+    DATA(new_x) = how_far * cos( degrees_to_radians( CONV f( current_angle ) ) ).
+    DATA(new_y) = how_far * sin( degrees_to_radians( CONV f( current_angle ) ) ).
 
     me->line(
       x_from = current_x
@@ -109,8 +109,8 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
       x_to = current_x + new_x
       y_to = current_y + new_y ).
 
-    me->current_x += new_x.
-    me->current_y += new_y.
+    me->current_x = current_x + new_x.
+    me->current_y = current_y + new_y.
 
     turtle = me.
   ENDMETHOD.
@@ -129,14 +129,14 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
 
 
   METHOD left.
-    current_angle -= degrees.
+    current_angle = current_angle - degrees.
     current_angle = current_angle MOD 360.
     turtle = me.
   ENDMETHOD.
 
 
   METHOD line.
-    svg &&= |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
+    svg = svg && |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }"/>|.
     turtle = me.
   ENDMETHOD.
@@ -148,7 +148,7 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
       me->forward( side_length ).
       me->right( 360 / num_sides ).
 
-      i += 1.
+      i = i + 1.
     ENDWHILE.
 
     turtle = me.
@@ -161,7 +161,7 @@ CLASS ZCL_TURTLE IMPLEMENTATION.
 
 
   METHOD right.
-    current_angle += degrees.
+    current_angle = current_angle + degrees.
     current_angle = current_angle MOD 360.
     turtle = me.
   ENDMETHOD.
