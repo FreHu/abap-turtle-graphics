@@ -53,6 +53,10 @@ CLASS zcl_turtle DEFINITION
       IMPORTING how_far       TYPE i
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
+    METHODS back
+      IMPORTING how_far       TYPE i
+      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+
     METHODS line
       IMPORTING x_from        TYPE i
                 y_from        TYPE i
@@ -136,6 +140,11 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
+  METHOD back.
+    right( degrees = 180 ).
+    forward( how_far ).
+    right( degrees = 180 ).
+  ENDMETHOD.
 
   METHOD get_svg.
     svg = me->svg.
@@ -219,6 +228,10 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD constructor.
     me->width = width.
     me->height = height.
+    me->pen = VALUE #(
+     stroke_width = 1
+     stroke_color = `#000000`
+   ).
   ENDMETHOD.
 
   METHOD text.

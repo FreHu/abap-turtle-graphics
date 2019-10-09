@@ -1,18 +1,25 @@
 REPORT zabapturtle.
 
+" square using movement
+DATA(turtle) = zcl_turtle=>new( width = 640 height = 480 ).
+turtle->goto( x = 100 y = 100 ).
+DO 4 TIMES.
+  turtle->back( 100 ).
+  turtle->right( 90 ).
+ENDDO.
+turtle->show( ).
+
+" square using a polyline
+DATA(square) = zcl_turtle_examples=>filled_square( ).
+square->show(  ).
+
+" shape composed of multiple polygons
 zcl_turtle_examples=>polygon_flower(
   polygons = 15
   polygon_sides = 10
 )->show( ).
 
-" there are also polygon/polyline methods which accept a list of points.
-DATA(polygon) = zcl_turtle_examples=>polygon_using_lines( side_length = 50 num_sides = 9 ).
-polygon->show(  ).
-
-DATA(square) = zcl_turtle_examples=>filled_square( ).
-square->show(  ).
-
-" this will open a few windows
+" usage for "functional" programmers. this will open a few windows
 TYPES: turtles TYPE STANDARD TABLE OF REF TO zcl_turtle WITH EMPTY KEY.
 DATA(more_examples) = VALUE turtles(
   FOR polygons IN zcl_number_range=>get( min = 12 max = 15 )
