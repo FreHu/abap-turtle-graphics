@@ -60,12 +60,16 @@ styling:
 
 ### L-systems (or TurtleScript, if you will)
 
+[Wiki link](https://en.wikipedia.org/wiki/L-system)
+
 Define an initial state, a number of iterations and a set of replacement rules. These will be applied in each iteration. Finally, the symbols are translated into instructions and executed.
 
 #### Supported symbols:
 
 - `F`, `G`, `H` - variables. Interpreted as forward()
 - `+`, `-` - rotate right/left
+- `[` - push current position on a stack
+- `]` - pop and goto popped position from the stack
 
 ```abap
     DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
@@ -88,4 +92,9 @@ Define an initial state, a number of iterations and a set of replacement rules. 
     lsystem->execute( ).
     lsystem->show( ).
 ```
+
 ![lsystem-pattern](https://user-images.githubusercontent.com/5097067/66557433-2b6e3800-eb52-11e9-8ea7-de828b93f6a2.png)
+
+The stack can be used to generate plants or trees:
+
+![stack-based pattern](https://user-images.githubusercontent.com/5097067/66562828-c10ec500-eb5c-11e9-8568-34989d2e6365.png)
