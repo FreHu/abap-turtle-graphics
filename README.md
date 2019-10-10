@@ -31,7 +31,7 @@ ENDWHILE.
 turtle->show( ).
 ```
 
-![image](https://user-images.githubusercontent.com/5097067/66410268-2003fb00-e9f2-11e9-94a5-fc764b461932.png)
+![image](https://user-images.githubusercontent.com/5097067/66575607-7ac65f80-eb76-11e9-8a9c-0ccab1041d38.png)
 
 see `zcl_turtle_examples` for more
 
@@ -56,6 +56,8 @@ styling:
 - stroke color
 - fill color
 
+Color schemes:
+A random color is used for each line. You can use `turtle->set_color_scheme( )` to change the colors.
 
 
 ### L-systems (or TurtleScript, if you will)
@@ -93,7 +95,7 @@ Define an initial state, a number of iterations and a set of replacement rules. 
     lsystem->show( ).
 ```
 
-![lsystem-pattern](https://user-images.githubusercontent.com/5097067/66557433-2b6e3800-eb52-11e9-8ea7-de828b93f6a2.png)
+![image](https://user-images.githubusercontent.com/5097067/66575635-8ca80280-eb76-11e9-8c3b-d22604ce6eb2.png)
 
 The stack can be used to generate plants or trees:
 ```abap
@@ -119,4 +121,4 @@ DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
     lsystem->show( ).
 ```
 
-![stack-based pattern](https://user-images.githubusercontent.com/5097067/66562828-c10ec500-eb5c-11e9-8568-34989d2e6365.png)
+![image](https://user-images.githubusercontent.com/5097067/66575734-beb96480-eb76-11e9-886a-e6641da67a0e.png)
