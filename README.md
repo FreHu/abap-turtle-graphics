@@ -6,6 +6,8 @@ The graphics are generated in the svg format.
 
 ## Usage example
 
+### Turtle
+
 ```abap
 REPORT zabapturtle.
 
@@ -33,7 +35,7 @@ turtle->show( ).
 
 see `zcl_turtle_examples` for more
 
-## Supports
+#### Supported instructions
 
 movement:
 
@@ -54,3 +56,36 @@ styling:
 - stroke color
 - fill color
 
+
+
+### L-systems (or TurtleScript, if you will)
+
+Define an initial state, a number of iterations and a set of replacement rules. These will be applied in each iteration. Finally, the symbols are translated into instructions and executed.
+
+#### Supported symbols:
+
+- `F`, `G`, `H` - variables. Interpreted as forward()
+- `+`, `-` - rotate right/left
+
+```abap
+    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    turtle->goto( x = 200 y = 200 ).
+    
+    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
+      initial_state = `F`
+      move_distance = 10
+      rotate_by = 90
+      num_iterations = 3
+      rewrite_rules = VALUE #(
+        ( from = `F` to = `F+F-F-F+F` )
+       )
+    ).
+
+    DATA(lsystem) = zcl_turtle_lsystem=>new(
+      turtle = turtle
+      parameters = parameters ).
+
+    lsystem->execute( ).
+    lsystem->show( ).
+```
+![lsystem-pattern](https://user-images.githubusercontent.com/5097067/66557433-2b6e3800-eb52-11e9-8ea7-de828b93f6a2.png)
