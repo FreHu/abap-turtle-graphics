@@ -18,7 +18,7 @@ CLASS zcl_turtle_lsystem DEFINITION
         "! For move instructions, how many pixels to move by
         move_distance  TYPE i,
         "! For rotate instructions, how many degrees to rotate by
-        rotate_by      TYPE i,
+        rotate_by      TYPE f,
         "! A list of rewrite patterns which will be applied each iteration in order.
         "! E.g. initial state F with rule F -> FG and 3 iterations
         "! will produce FG, FGG, FGGG in each iteration respectively.
@@ -32,15 +32,20 @@ CLASS zcl_turtle_lsystem DEFINITION
       RETURNING VALUE(result) TYPE REF TO zcl_turtle_lsystem.
 
     METHODS execute.
-
     METHODS show.
 
   PRIVATE SECTION.
     METHODS get_final_value
       RETURNING VALUE(result) TYPE string.
 
+    TYPES: t_position_stack TYPE STANDARD TABLE OF zcl_turtle=>turtle_position WITH EMPTY KEY.
+    METHODS:
+      push_stack IMPORTING position TYPE zcl_turtle=>turtle_position,
+      pop_stack RETURNING VALUE(position) TYPE zcl_turtle=>turtle_position.
+
     DATA: turtle TYPE REF TO zcl_turtle.
     DATA: parameters TYPE params.
+    DATA: position_stack TYPE t_position_stack.
 ENDCLASS.
 
 
@@ -67,6 +72,12 @@ CLASS zcl_turtle_lsystem IMPLEMENTATION.
           turtle->right( parameters-rotate_by ).
         WHEN `-`.
           turtle->left( parameters-rotate_by ).
+        WHEN `[`.
+          push_stack( turtle->position ).
+        WHEN `]`.
+          DATA(position) = pop_stack( ).
+          turtle->goto( x = position-x y = position-y ).
+          turtle->set_angle( position-angle ).
       ENDCASE.
 
       index = index + 1.
@@ -88,6 +99,15 @@ CLASS zcl_turtle_lsystem IMPLEMENTATION.
     ENDDO.
 
     result = instructions.
+  ENDMETHOD.
+
+  METHOD pop_stack.
+    position = position_stack[ lines( position_stack ) ].
+    DELETE position_stack INDEX lines( position_stack ).
+  ENDMETHOD.
+
+  METHOD push_stack.
+    APPEND position TO position_stack.
   ENDMETHOD.
 
 ENDCLASS.
