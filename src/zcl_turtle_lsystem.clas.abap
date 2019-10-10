@@ -48,8 +48,6 @@ CLASS zcl_turtle_lsystem DEFINITION
     DATA: position_stack TYPE t_position_stack.
 ENDCLASS.
 
-
-
 CLASS zcl_turtle_lsystem IMPLEMENTATION.
 
   METHOD new.

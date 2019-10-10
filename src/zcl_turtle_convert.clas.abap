@@ -14,8 +14,6 @@ CLASS zcl_turtle_convert DEFINITION
 
 ENDCLASS.
 
-
-
 CLASS zcl_turtle_convert IMPLEMENTATION.
 
   METHOD degrees_to_radians.

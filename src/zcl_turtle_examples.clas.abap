@@ -17,8 +17,6 @@ CLASS zcl_turtle_examples DEFINITION
 
 ENDCLASS.
 
-
-
 CLASS zcl_turtle_examples IMPLEMENTATION.
 
   METHOD polygon_flower.

@@ -9,8 +9,6 @@ CLASS zcl_turtle_lsystem_examples DEFINITION
 
 ENDCLASS.
 
-
-
 CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
 
   METHOD koch_curve.
