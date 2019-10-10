@@ -4,12 +4,11 @@ CLASS zcl_turtle DEFINITION
 
   PUBLIC SECTION.
 
-    TYPES: rgb_hex_color TYPE c LENGTH 7.
     TYPES:
       BEGIN OF t_pen,
-        stroke_color TYPE rgb_hex_color,
+        stroke_color TYPE zcl_turtle_colors=>rgb_hex_color,
         stroke_width TYPE i,
-        fill_color   TYPE rgb_hex_color,
+        fill_color   TYPE zcl_turtle_colors=>rgb_hex_color,
       END OF t_pen.
 
     TYPES:
@@ -91,14 +90,17 @@ CLASS zcl_turtle DEFINITION
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS get_svg RETURNING VALUE(svg) TYPE string.
-    METHODS: get_position RETURNING VALUE(result) TYPE turtle_position,
-      set_position IMPORTING position TYPE turtle_position.
+    METHODS:
+      get_position RETURNING VALUE(result) TYPE turtle_position,
+      set_position IMPORTING position TYPE turtle_position,
+      set_color_scheme IMPORTING color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors.
 
-    DATA: svg      TYPE string READ-ONLY,
-          width    TYPE i READ-ONLY,
-          height   TYPE i READ-ONLY,
-          position TYPE turtle_position READ-ONLY,
-          pen      TYPE t_pen READ-ONLY.
+    DATA: svg          TYPE string READ-ONLY,
+          width        TYPE i READ-ONLY,
+          height       TYPE i READ-ONLY,
+          position     TYPE turtle_position READ-ONLY,
+          pen          TYPE t_pen READ-ONLY,
+          color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY.
 
 ENDCLASS.
 
@@ -160,6 +162,7 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD line.
+    pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
     svg = svg && |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }"/>|.
 
@@ -217,6 +220,7 @@ CLASS zcl_turtle IMPLEMENTATION.
      stroke_width = 1
      stroke_color = `#FF0000`
    ).
+   me->color_scheme = zcl_turtle_colors=>default_color_scheme.
   ENDMETHOD.
 
   METHOD text.
@@ -233,6 +237,10 @@ CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD set_angle.
     me->position-angle = angle.
+  ENDMETHOD.
+
+  METHOD set_color_scheme.
+    me->color_scheme = color_scheme.
   ENDMETHOD.
 
 ENDCLASS.
