@@ -32,6 +32,10 @@ CLASS zcl_turtle DEFINITION
                 width         TYPE i
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
+    METHODS constructor
+      IMPORTING height TYPE i
+                width  TYPE i.
+
     METHODS right
       IMPORTING degrees       TYPE i
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
@@ -96,24 +100,15 @@ CLASS zcl_turtle DEFINITION
 
           pen           TYPE t_pen READ-ONLY.
 
-  PRIVATE SECTION.
-    METHODS constructor
-      IMPORTING height TYPE i
-                width  TYPE i.
-
 ENDCLASS.
 
-
-
 CLASS zcl_turtle IMPLEMENTATION.
-
 
   METHOD circle.
     svg = svg && |<circle cx="{ center_x }" cy="{ center_y }" r="{ radius }" |
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }" fill="{ pen-fill_color }"/>|.
     turtle = me.
   ENDMETHOD.
-
 
   METHOD new.
     turtle = NEW zcl_turtle( width = width height = height ).
@@ -122,7 +117,6 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD degrees_to_radians.
     radians = ( degrees * pi ) / 180.
   ENDMETHOD.
-
 
   METHOD forward.
     DATA(new_x) = how_far * cos( degrees_to_radians( CONV f( current_angle ) ) ).
@@ -150,13 +144,11 @@ CLASS zcl_turtle IMPLEMENTATION.
     svg = me->svg.
   ENDMETHOD.
 
-
   METHOD goto.
     me->current_x = x.
     me->current_y = y.
     turtle = me.
   ENDMETHOD.
-
 
   METHOD left.
     current_angle = current_angle - degrees.
@@ -164,14 +156,12 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-
   METHOD line.
     svg = svg && |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }"/>|.
 
     turtle = me.
   ENDMETHOD.
-
 
   METHOD polygon.
     DATA(point_data) = REDUCE string(
@@ -185,11 +175,9 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-
   METHOD radians_to_degrees.
     degrees = radians * ( 180 / pi ).
   ENDMETHOD.
-
 
   METHOD right.
     current_angle = current_angle + degrees.
@@ -197,16 +185,14 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-
   METHOD set_pen.
     me->pen = pen.
     turtle = me.
   ENDMETHOD.
 
-
   METHOD show.
-    cl_abap_browser=>show_html(
-      html_string = |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>| ).
+    cl_abap_browser=>show_html( html_string =
+      |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>| ).
 
     turtle = me.
   ENDMETHOD.
@@ -222,8 +208,6 @@ CLASS zcl_turtle IMPLEMENTATION.
 
     turtle = me.
   ENDMETHOD.
-
-
 
   METHOD constructor.
     me->width = width.

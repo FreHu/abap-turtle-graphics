@@ -13,8 +13,6 @@ CLASS zcl_number_range DEFINITION
 
 ENDCLASS.
 
-
-
 CLASS zcl_number_range IMPLEMENTATION.
 
   METHOD get.
