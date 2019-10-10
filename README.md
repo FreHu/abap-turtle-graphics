@@ -96,7 +96,7 @@ Define an initial state, a number of iterations and a set of replacement rules. 
 ![lsystem-pattern](https://user-images.githubusercontent.com/5097067/66557433-2b6e3800-eb52-11e9-8ea7-de828b93f6a2.png)
 
 The stack can be used to generate plants or trees:
-```
+```abap
 DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
     turtle->goto( x = 300 y = 600 ).
     turtle->set_angle( -90 ).
