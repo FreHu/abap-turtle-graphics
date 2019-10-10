@@ -96,5 +96,27 @@ Define an initial state, a number of iterations and a set of replacement rules. 
 ![lsystem-pattern](https://user-images.githubusercontent.com/5097067/66557433-2b6e3800-eb52-11e9-8ea7-de828b93f6a2.png)
 
 The stack can be used to generate plants or trees:
+```
+DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    turtle->goto( x = 300 y = 600 ).
+    turtle->set_angle( -90 ).
+
+    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
+      initial_state = `F`
+      move_distance = 10
+      rotate_by = 25
+      num_iterations = 5
+      rewrite_rules = VALUE #(
+        ( from = `F` to = `F[+F]F[-F][F]` )
+       )
+    ).
+
+    DATA(lsystem) = zcl_turtle_lsystem=>new(
+      turtle = turtle
+      parameters = parameters ).
+
+    lsystem->execute( ).
+    lsystem->show( ).
+```
 
 ![stack-based pattern](https://user-images.githubusercontent.com/5097067/66562828-c10ec500-eb5c-11e9-8568-34989d2e6365.png)
