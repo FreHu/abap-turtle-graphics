@@ -19,6 +19,13 @@ CLASS zcl_turtle DEFINITION
       END OF t_point,
       t_points TYPE STANDARD TABLE OF t_point WITH DEFAULT KEY.
 
+    TYPES:
+      BEGIN OF turtle_position,
+        x     TYPE i,
+        y     TYPE i,
+        angle TYPE f,
+      END OF turtle_position.
+
     CLASS-METHODS new
       IMPORTING height        TYPE i
                 width         TYPE i
@@ -29,11 +36,11 @@ CLASS zcl_turtle DEFINITION
                 width  TYPE i.
 
     METHODS right
-      IMPORTING degrees       TYPE i
+      IMPORTING degrees       TYPE f
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS left
-      IMPORTING degrees       TYPE i
+      IMPORTING degrees       TYPE f
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS set_pen
@@ -44,6 +51,9 @@ CLASS zcl_turtle DEFINITION
       IMPORTING x             TYPE i
                 y             TYPE i
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+
+    METHODS set_angle
+      IMPORTING angle TYPE f.
 
     METHODS forward
       IMPORTING how_far       TYPE i
@@ -81,16 +91,14 @@ CLASS zcl_turtle DEFINITION
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS get_svg RETURNING VALUE(svg) TYPE string.
+    METHODS: get_position RETURNING VALUE(result) TYPE turtle_position,
+      set_position IMPORTING position TYPE turtle_position.
 
-    DATA: svg           TYPE string READ-ONLY,
-          width         TYPE i READ-ONLY,
-          height        TYPE i READ-ONLY,
-
-          current_x     TYPE i READ-ONLY,
-          current_y     TYPE i READ-ONLY,
-          current_angle TYPE i READ-ONLY,
-
-          pen           TYPE t_pen READ-ONLY.
+    DATA: svg      TYPE string READ-ONLY,
+          width    TYPE i READ-ONLY,
+          height   TYPE i READ-ONLY,
+          position TYPE turtle_position READ-ONLY,
+          pen      TYPE t_pen READ-ONLY.
 
 ENDCLASS.
 
@@ -108,17 +116,23 @@ CLASS zcl_turtle IMPLEMENTATION.
 
 
   METHOD forward.
-    DATA(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( CONV f( current_angle ) ) ).
-    DATA(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( CONV f( current_angle ) ) ).
+
+    DATA(old_position) = position.
+    DATA(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
+    DATA(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
+
+    DATA(new_position) = VALUE turtle_position(
+      x = old_position-x + new_x
+      y = old_position-y + new_y
+      angle = old_position-angle ).
 
     me->line(
-      x_from = current_x
-      y_from = current_y
-      x_to = current_x + new_x
-      y_to = current_y + new_y ).
+      x_from = old_position-x
+      y_from = old_position-y
+      x_to = new_position-x
+      y_to = new_position-y ).
 
-    me->current_x = current_x + new_x.
-    me->current_y = current_y + new_y.
+    me->set_position( new_position ).
 
     turtle = me.
   ENDMETHOD.
@@ -134,14 +148,14 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD goto.
-    me->current_x = x.
-    me->current_y = y.
+    position-x = x.
+    position-y = y.
     turtle = me.
   ENDMETHOD.
 
   METHOD left.
-    current_angle = current_angle - degrees.
-    current_angle = current_angle MOD 360.
+    position-angle = position-angle - degrees.
+    position-angle = position-angle MOD 360.
     turtle = me.
   ENDMETHOD.
 
@@ -165,8 +179,8 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD right.
-    current_angle = current_angle + degrees.
-    current_angle = current_angle MOD 360.
+    position-angle = position-angle + degrees.
+    position-angle = position-angle MOD 360.
     turtle = me.
   ENDMETHOD.
 
@@ -206,7 +220,19 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD text.
-    me->svg = svg && |<text x="{ current_x }" y="{ current_y }">{ text }</text>|.
+    me->svg = svg && |<text x="{ position-x }" y="{ position-y }">{ text }</text>|.
+  ENDMETHOD.
+
+  METHOD get_position.
+    result = me->position.
+  ENDMETHOD.
+
+  METHOD set_position.
+    me->position = position.
+  ENDMETHOD.
+
+  METHOD set_angle.
+    me->position-angle = angle.
   ENDMETHOD.
 
 ENDCLASS.

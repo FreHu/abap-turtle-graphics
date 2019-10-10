@@ -34,3 +34,7 @@ DATA(more_examples) = VALUE turtles(
 " l-systems
 zcl_turtle_lsystem_examples=>koch_curve( ).
 zcl_turtle_lsystem_examples=>pattern( ).
+
+" stack-based examples
+zcl_turtle_lsystem_examples=>plant( ).
+zcl_turtle_lsystem_examples=>plant_2( ).
