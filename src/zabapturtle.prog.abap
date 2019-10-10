@@ -30,3 +30,7 @@ DATA(more_examples) = VALUE turtles(
     )->show( )
   )
 ).
+
+" l-systems
+zcl_turtle_lsystem_examples=>koch_curve( ).
+zcl_turtle_lsystem_examples=>pattern( ).

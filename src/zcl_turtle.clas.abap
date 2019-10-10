@@ -3,7 +3,7 @@ CLASS zcl_turtle DEFINITION
   CREATE PRIVATE.
 
   PUBLIC SECTION.
-    CONSTANTS: pi TYPE f VALUE '3.14159265359'.
+
     TYPES: rgb_hex_color TYPE c LENGTH 7.
     TYPES:
       BEGIN OF t_pen,
@@ -18,14 +18,6 @@ CLASS zcl_turtle DEFINITION
         y TYPE i,
       END OF t_point,
       t_points TYPE STANDARD TABLE OF t_point WITH DEFAULT KEY.
-
-    CLASS-METHODS degrees_to_radians
-      IMPORTING degrees        TYPE f
-      RETURNING VALUE(radians) TYPE f.
-
-    CLASS-METHODS radians_to_degrees
-      IMPORTING radians        TYPE f
-      RETURNING VALUE(degrees) TYPE f.
 
     CLASS-METHODS new
       IMPORTING height        TYPE i
@@ -114,13 +106,10 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = NEW zcl_turtle( width = width height = height ).
   ENDMETHOD.
 
-  METHOD degrees_to_radians.
-    radians = ( degrees * pi ) / 180.
-  ENDMETHOD.
 
   METHOD forward.
-    DATA(new_x) = how_far * cos( degrees_to_radians( CONV f( current_angle ) ) ).
-    DATA(new_y) = how_far * sin( degrees_to_radians( CONV f( current_angle ) ) ).
+    DATA(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( CONV f( current_angle ) ) ).
+    DATA(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( CONV f( current_angle ) ) ).
 
     me->line(
       x_from = current_x
@@ -175,10 +164,6 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-  METHOD radians_to_degrees.
-    degrees = radians * ( 180 / pi ).
-  ENDMETHOD.
-
   METHOD right.
     current_angle = current_angle + degrees.
     current_angle = current_angle MOD 360.
@@ -191,8 +176,10 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD show.
-    cl_abap_browser=>show_html( html_string =
-      |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>| ).
+    cl_abap_browser=>show_html(
+      size = cl_abap_browser=>xlarge
+      html_string =
+        |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>| ).
 
     turtle = me.
   ENDMETHOD.
@@ -214,7 +201,7 @@ CLASS zcl_turtle IMPLEMENTATION.
     me->height = height.
     me->pen = VALUE #(
      stroke_width = 1
-     stroke_color = `#000000`
+     stroke_color = `#FF0000`
    ).
   ENDMETHOD.
 
