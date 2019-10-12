@@ -4,6 +4,10 @@ Enterprise-grade turtle graphics library for abap intended for business-oriented
 
 The graphics are generated in the svg format. 
 
+## Installation
+
+Import the repository to your system using abapGit.
+
 ## Usage example
 
 ### Turtle
