@@ -30,6 +30,7 @@ ENDWHILE.
 
 turtle->show( ).
 ```
+You can also save the image using `turtle->download()`.
 
 ![image](https://user-images.githubusercontent.com/5097067/66575607-7ac65f80-eb76-11e9-8a9c-0ccab1041d38.png)
 
