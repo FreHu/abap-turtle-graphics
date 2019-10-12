@@ -89,6 +89,9 @@ CLASS zcl_turtle DEFINITION
     METHODS show
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
+    METHODS download
+      IMPORTING filename TYPE string DEFAULT `abap-turtle.html`.
+
     METHODS get_svg RETURNING VALUE(svg) TYPE string.
     METHODS:
       get_position RETURNING VALUE(result) TYPE turtle_position,
@@ -101,6 +104,10 @@ CLASS zcl_turtle DEFINITION
           position     TYPE turtle_position READ-ONLY,
           pen          TYPE t_pen READ-ONLY,
           color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY.
+
+  PRIVATE SECTION.
+    METHODS get_html
+      RETURNING VALUE(html) TYPE string.
 
 ENDCLASS.
 
@@ -195,8 +202,7 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD show.
     cl_abap_browser=>show_html(
       size = cl_abap_browser=>xlarge
-      html_string =
-        |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>| ).
+      html_string = get_html( ) ).
 
     turtle = me.
   ENDMETHOD.
@@ -220,7 +226,7 @@ CLASS zcl_turtle IMPLEMENTATION.
      stroke_width = 1
      stroke_color = `#FF0000`
    ).
-   me->color_scheme = zcl_turtle_colors=>default_color_scheme.
+    me->color_scheme = zcl_turtle_colors=>default_color_scheme.
   ENDMETHOD.
 
   METHOD text.
@@ -241,6 +247,48 @@ CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD set_color_scheme.
     me->color_scheme = color_scheme.
+  ENDMETHOD.
+
+  METHOD download.
+
+    DATA(file_name) = filename.
+    DATA(path) = ``.
+    DATA(full_path) = ``.
+
+    cl_gui_frontend_services=>file_save_dialog(
+      EXPORTING
+        default_extension = `html`
+        default_file_name = filename
+        initial_directory = ``
+      CHANGING
+        filename = file_name
+        path = path
+        fullpath = full_path
+      EXCEPTIONS
+        OTHERS = 1 ).
+
+    IF sy-subrc <> 0.
+      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+              WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    ENDIF.
+
+    SPLIT me->get_html( ) AT |\r\n| INTO TABLE DATA(lines).
+    cl_gui_frontend_services=>gui_download(
+      EXPORTING
+        filename = file_name
+      CHANGING
+        data_tab = lines
+      EXCEPTIONS OTHERS = 1 ).
+
+    IF sy-subrc <> 0.
+      MESSAGE ID sy-msgid TYPE sy-msgty NUMBER sy-msgno
+        WITH sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD get_html.
+    html = |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>|.
   ENDMETHOD.
 
 ENDCLASS.
