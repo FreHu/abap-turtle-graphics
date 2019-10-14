@@ -1,5 +1,7 @@
 ![logo](./turtle.png)
 
+[Announcement blog](https://blogs.sap.com/2019/10/12/abapturtle-make-something-pretty-in-abap-and-possibly-win-prizes/)
+
 Enterprise-grade turtle graphics library for abap intended for business-oriented children or bored adults. 
 
 The graphics are generated in the svg format. 
