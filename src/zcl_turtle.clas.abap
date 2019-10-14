@@ -9,6 +9,7 @@ CLASS zcl_turtle DEFINITION
         stroke_color TYPE zcl_turtle_colors=>rgb_hex_color,
         stroke_width TYPE i,
         fill_color   TYPE zcl_turtle_colors=>rgb_hex_color,
+        is_up        TYPE abap_bool,
       END OF t_pen.
 
     TYPES:
@@ -62,6 +63,12 @@ CLASS zcl_turtle DEFINITION
       IMPORTING how_far       TYPE i
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
+    METHODS pen_up
+      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+
+    METHODS pen_down
+      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+
     METHODS line
       IMPORTING x_from        TYPE i
                 y_from        TYPE i
@@ -92,6 +99,9 @@ CLASS zcl_turtle DEFINITION
     METHODS download
       IMPORTING filename TYPE string DEFAULT `abap-turtle.html`.
 
+    METHODS enable_random_colors.
+    METHODS disable_random_colors.
+
     METHODS get_svg RETURNING VALUE(svg) TYPE string.
     METHODS:
       get_position RETURNING VALUE(result) TYPE turtle_position,
@@ -106,6 +116,7 @@ CLASS zcl_turtle DEFINITION
           color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY.
 
   PRIVATE SECTION.
+    DATA use_random_colors TYPE abap_bool.
     METHODS get_html
       RETURNING VALUE(html) TYPE string.
 
@@ -135,11 +146,13 @@ CLASS zcl_turtle IMPLEMENTATION.
       y = old_position-y + new_y
       angle = old_position-angle ).
 
-    me->line(
-      x_from = old_position-x
-      y_from = old_position-y
-      x_to = new_position-x
-      y_to = new_position-y ).
+    IF pen-is_up = abap_false.
+      me->line(
+        x_from = old_position-x
+        y_from = old_position-y
+        x_to = new_position-x
+        y_to = new_position-y ).
+    ENDIF.
 
     me->set_position( new_position ).
 
@@ -169,7 +182,11 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD line.
-    pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
+
+    IF use_random_colors = abap_true.
+      pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
+    ENDIF.
+
     svg = svg && |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
         && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }"/>|.
 
@@ -225,8 +242,10 @@ CLASS zcl_turtle IMPLEMENTATION.
     me->pen = VALUE #(
      stroke_width = 1
      stroke_color = `#FF0000`
+     is_up = abap_false
    ).
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
+    me->use_random_colors = abap_true.
   ENDMETHOD.
 
   METHOD text.
@@ -289,6 +308,24 @@ CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD get_html.
     html = |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>|.
+  ENDMETHOD.
+
+  METHOD disable_random_colors.
+    me->use_random_colors = abap_false.
+  ENDMETHOD.
+
+  METHOD enable_random_colors.
+    me->use_random_colors = abap_true.
+  ENDMETHOD.
+
+  METHOD pen_down.
+    me->pen-is_up = abap_false.
+    turtle = me.
+  ENDMETHOD.
+
+  METHOD pen_up.
+    me->pen-is_up = abap_true.
+    turtle = me.
   ENDMETHOD.
 
 ENDCLASS.

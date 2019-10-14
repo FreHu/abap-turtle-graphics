@@ -4,7 +4,7 @@ REPORT zabapturtle.
 DATA(turtle) = zcl_turtle=>new( width = 640 height = 480 ).
 turtle->goto( x = 100 y = 100 ).
 DO 4 TIMES.
-  turtle->back( 100 ).
+  turtle->forward( 100 ).
   turtle->right( 90 ).
 ENDDO.
 turtle->show( ).
