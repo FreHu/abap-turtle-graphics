@@ -46,6 +46,7 @@ movement:
 
 - forward, back
 - left,right (rotate by x degrees)
+- pen up/down (only considered when moving, not when outputting svg directly)
 
 svg primitives:
 
