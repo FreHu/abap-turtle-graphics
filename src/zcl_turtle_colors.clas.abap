@@ -1,7 +1,5 @@
 CLASS zcl_turtle_colors DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+  PUBLIC FINAL.
 
   PUBLIC SECTION.
     TYPES: rgb_hex_color  TYPE string,
@@ -17,8 +15,6 @@ CLASS zcl_turtle_colors DEFINITION
     CLASS-DATA: random TYPE REF TO cl_abap_random.
 
 ENDCLASS.
-
-
 
 CLASS zcl_turtle_colors IMPLEMENTATION.
 
