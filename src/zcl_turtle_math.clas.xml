@@ -3,9 +3,9 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_TURTLE_CONVERT</CLSNAME>
+    <CLSNAME>ZCL_TURTLE_MATH</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Unit conversion utility</DESCRIPT>
+    <DESCRIPT>Math utility</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

@@ -4,6 +4,12 @@ CLASS zcl_turtle DEFINITION
 
   PUBLIC SECTION.
 
+    CONSTANTS:
+      BEGIN OF defaults,
+        height TYPE i VALUE 800,
+        width  TYPE i VALUE 600,
+      END OF defaults.
+
     TYPES:
       BEGIN OF t_pen,
         stroke_color TYPE zcl_turtle_colors=>rgb_hex_color,
@@ -26,9 +32,19 @@ CLASS zcl_turtle DEFINITION
         angle TYPE f,
       END OF turtle_position.
 
+    TYPES: multiple_turtles TYPE STANDARD TABLE OF REF TO zcl_turtle.
+
     CLASS-METHODS new
-      IMPORTING height        TYPE i
-                width         TYPE i
+      IMPORTING height        TYPE i DEFAULT defaults-height
+                width         TYPE i DEFAULT defaults-width
+      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+
+    CLASS-METHODS at_position_of
+      IMPORTING existing_turtle TYPE REF TO zcl_turtle
+      RETURNING VALUE(turtle)   TYPE REF TO zcl_turtle.
+
+    CLASS-METHODS compose
+      IMPORTING turtles       TYPE multiple_turtles
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS constructor
@@ -69,30 +85,6 @@ CLASS zcl_turtle DEFINITION
     METHODS pen_down
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
-    METHODS line
-      IMPORTING x_from        TYPE i
-                y_from        TYPE i
-                x_to          TYPE i
-                y_to          TYPE i
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
-
-    METHODS circle
-      IMPORTING center_x      TYPE i
-                center_y      TYPE i
-                radius        TYPE i
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
-
-    METHODS polygon
-      IMPORTING points        TYPE t_points
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
-
-    METHODS polyline
-      IMPORTING points        TYPE t_points
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
-
-    METHODS text
-      IMPORTING text TYPE string.
-
     METHODS show
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
@@ -102,11 +94,16 @@ CLASS zcl_turtle DEFINITION
     METHODS enable_random_colors.
     METHODS disable_random_colors.
 
-    METHODS get_svg RETURNING VALUE(svg) TYPE string.
+    METHODS:
+      get_svg RETURNING VALUE(svg) TYPE string,
+      append_svg IMPORTING svg_to_append  TYPE string.
+
     METHODS:
       get_position RETURNING VALUE(result) TYPE turtle_position,
       set_position IMPORTING position TYPE turtle_position,
-      set_color_scheme IMPORTING color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors.
+      set_color_scheme IMPORTING color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors,
+      set_width IMPORTING width TYPE i,
+      set_height IMPORTING height TYPE i.
 
     DATA: svg          TYPE string READ-ONLY,
           width        TYPE i READ-ONLY,
@@ -117,18 +114,20 @@ CLASS zcl_turtle DEFINITION
 
   PRIVATE SECTION.
     DATA use_random_colors TYPE abap_bool.
+    DATA svg_builder TYPE REF TO zcl_turtle_svg.
+
     METHODS get_html
       RETURNING VALUE(html) TYPE string.
+    METHODS line
+      IMPORTING x_from        TYPE i
+                y_from        TYPE i
+                x_to          TYPE i
+                y_to          TYPE i
+      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
 ENDCLASS.
 
 CLASS zcl_turtle IMPLEMENTATION.
-
-  METHOD circle.
-    svg = svg && |<circle cx="{ center_x }" cy="{ center_y }" r="{ radius }" |
-        && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }" fill="{ pen-fill_color }"/>|.
-    turtle = me.
-  ENDMETHOD.
 
   METHOD new.
     turtle = NEW zcl_turtle( width = width height = height ).
@@ -187,20 +186,11 @@ CLASS zcl_turtle IMPLEMENTATION.
       pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
     ENDIF.
 
-    svg = svg && |<line x1="{ x_from }" y1="{ y_from }" x2="{ x_to }" y2="{ y_to }"|
-        && |stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }"/>|.
-
-    turtle = me.
-  ENDMETHOD.
-
-  METHOD polygon.
-    DATA(point_data) = REDUCE string(
-    INIT res = ||
-    FOR point IN points
-    NEXT res = res && |{ point-x },{ point-y } | ).
-
-    svg = svg && |<polygon points="{ point_data }"|
-                  && | stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }" fill="{ pen-fill_color }" />|.
+    append_svg( svg_builder->line( VALUE #(
+      x_from = x_from
+      y_from = y_from
+      x_to = x_to
+      y_to = y_to ) ) ).
 
     turtle = me.
   ENDMETHOD.
@@ -224,18 +214,6 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-  METHOD polyline.
-    DATA(point_data) = REDUCE string(
-      INIT res = ||
-      FOR point IN points
-      NEXT res = res && |{ point-x },{ point-y } | ).
-
-    svg = svg && |<polyline points="{ point_data }"|
-                  && | stroke="{ pen-stroke_color }" stroke-width="{ pen-stroke_width }" fill="{ pen-fill_color }" />|.
-
-    turtle = me.
-  ENDMETHOD.
-
   METHOD constructor.
     me->width = width.
     me->height = height.
@@ -246,10 +224,7 @@ CLASS zcl_turtle IMPLEMENTATION.
    ).
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
     me->use_random_colors = abap_true.
-  ENDMETHOD.
-
-  METHOD text.
-    me->svg = svg && |<text x="{ position-x }" y="{ position-y }">{ text }</text>|.
+    me->svg_builder = zcl_turtle_svg=>create( me ).
   ENDMETHOD.
 
   METHOD get_position.
@@ -326,6 +301,56 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD pen_up.
     me->pen-is_up = abap_true.
     turtle = me.
+  ENDMETHOD.
+
+  METHOD at_position_of.
+    turtle = NEW #(
+      width = existing_turtle->width
+      height = existing_turtle->height
+    ).
+
+    turtle->set_pen( existing_turtle->pen ).
+    turtle->set_color_scheme( existing_turtle->color_scheme ).
+    turtle->set_position( existing_turtle->position ).
+    turtle->set_angle( existing_turtle->position-angle ).
+  ENDMETHOD.
+
+  METHOD append_svg.
+    me->svg = me->svg && svg_to_append.
+  ENDMETHOD.
+
+  METHOD compose.
+
+    ASSERT lines( turtles ) >= 1.
+
+    " start where the last one left off
+    turtle = zcl_turtle=>at_position_of( turtles[ lines( turtles ) ] ).
+
+    " new image size is the largest of composed turtles
+    DATA(new_width) = zcl_turtle_math=>find_max_int(
+      VALUE #( FOR <x> IN turtles ( <x>->width ) ) ).
+
+    DATA(new_height) = zcl_turtle_math=>find_max_int(
+      VALUE #( FOR <x> IN turtles ( <x>->height ) ) ).
+
+    turtle->set_height( new_height ).
+    turtle->set_width( new_width ).
+
+    DATA(composed_svg) = REDUCE string(
+      INIT result = ``
+        FOR <svg> IN VALUE stringtab( FOR <x> IN turtles ( <x>->svg ) )
+      NEXT result = result && <svg> ).
+
+    turtle->append_svg( composed_svg ).
+
+  ENDMETHOD.
+
+  METHOD set_width.
+    me->width = width.
+  ENDMETHOD.
+
+  METHOD set_height.
+    me->height = height.
   ENDMETHOD.
 
 ENDCLASS.
