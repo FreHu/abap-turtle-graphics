@@ -17,12 +17,15 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
     turtle->goto( x = 200 y = 200 ).
     DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
       initial_state = `F`
-      move_distance = 10
-      rotate_by = 90
+      instructions = VALUE #(
+        ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
+        ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
+        ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 )
+      )
       num_iterations = 3
       rewrite_rules = VALUE #(
         ( from = `F` to = `F+F-F-F+F` )
-       )
+      )
     ).
 
     DATA(lsystem) = zcl_turtle_lsystem=>new(
@@ -40,8 +43,10 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
 
     DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
       initial_state = `F-F-F-F`
-      move_distance = 10
-      rotate_by = 90
+      instructions = VALUE #(
+        ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
+        ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
+        ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 ) )
       num_iterations = 3
       rewrite_rules = VALUE #(
         ( from = `F` to = `FF-F+F-F-FF` )
@@ -64,8 +69,13 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
 
     DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
       initial_state = `F`
-      move_distance = 10
-      rotate_by = 25
+      instructions = VALUE #(
+        ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
+        ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = 25 )
+        ( symbol = `-` kind = zcl_turtle_lsystem=>instruction_kind-left amount = 25 )
+        ( symbol = `[` kind = zcl_turtle_lsystem=>instruction_kind-stack_push )
+        ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
+      )
       num_iterations = 5
       rewrite_rules = VALUE #(
         ( from = `F` to = `F[+F]F[-F][F]` )
@@ -87,8 +97,13 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
 
     DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
       initial_state = `F`
-      move_distance = 10
-      rotate_by = 21
+      instructions = VALUE #(
+        ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
+        ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = 21 )
+        ( symbol = `-` kind = zcl_turtle_lsystem=>instruction_kind-left amount = 21 )
+        ( symbol = `[` kind = zcl_turtle_lsystem=>instruction_kind-stack_push )
+        ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
+        )
       num_iterations = 4
       rewrite_rules = VALUE #(
         ( from = `F` to = `FF-[+F+F+F]+[-F-F+F]` )

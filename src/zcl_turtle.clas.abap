@@ -39,10 +39,13 @@ CLASS zcl_turtle DEFINITION
                 width         TYPE i DEFAULT defaults-width
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
-    CLASS-METHODS at_position_of
+    "! Creates a new turtle based on an existing instance. The position, angle and pen are preserved.
+    "! Does not preserve content.
+    CLASS-METHODS from_existing
       IMPORTING existing_turtle TYPE REF TO zcl_turtle
       RETURNING VALUE(turtle)   TYPE REF TO zcl_turtle.
 
+    "! Merges drawings of multiple turtles into one.
     CLASS-METHODS compose
       IMPORTING turtles       TYPE multiple_turtles
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
@@ -103,18 +106,19 @@ CLASS zcl_turtle DEFINITION
       set_position IMPORTING position TYPE turtle_position,
       set_color_scheme IMPORTING color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors,
       set_width IMPORTING width TYPE i,
-      set_height IMPORTING height TYPE i.
+      set_height IMPORTING height TYPE i,
+      set_svg IMPORTING svg TYPE string.
 
-    DATA: svg          TYPE string READ-ONLY,
-          width        TYPE i READ-ONLY,
-          height       TYPE i READ-ONLY,
-          position     TYPE turtle_position READ-ONLY,
-          pen          TYPE t_pen READ-ONLY,
-          color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY.
+    DATA: svg           TYPE string READ-ONLY,
+          width         TYPE i READ-ONLY,
+          height        TYPE i READ-ONLY,
+          position      TYPE turtle_position READ-ONLY,
+          pen           TYPE t_pen READ-ONLY,
+          color_scheme  TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY,
+          svg_builder TYPE REF TO zcl_turtle_svg READ-ONLY.
 
   PRIVATE SECTION.
     DATA use_random_colors TYPE abap_bool.
-    DATA svg_builder TYPE REF TO zcl_turtle_svg.
 
     METHODS get_html
       RETURNING VALUE(html) TYPE string.
@@ -224,7 +228,7 @@ CLASS zcl_turtle IMPLEMENTATION.
    ).
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
     me->use_random_colors = abap_true.
-    me->svg_builder = zcl_turtle_svg=>create( me ).
+    me->svg_builder = zcl_turtle_svg=>new( me ).
   ENDMETHOD.
 
   METHOD get_position.
@@ -303,7 +307,7 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = me.
   ENDMETHOD.
 
-  METHOD at_position_of.
+  METHOD from_existing.
     turtle = NEW #(
       width = existing_turtle->width
       height = existing_turtle->height
@@ -324,7 +328,7 @@ CLASS zcl_turtle IMPLEMENTATION.
     ASSERT lines( turtles ) >= 1.
 
     " start where the last one left off
-    turtle = zcl_turtle=>at_position_of( turtles[ lines( turtles ) ] ).
+    turtle = zcl_turtle=>from_existing( turtles[ lines( turtles ) ] ).
 
     " new image size is the largest of composed turtles
     DATA(new_width) = zcl_turtle_math=>find_max_int(
@@ -351,6 +355,10 @@ CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD set_height.
     me->height = height.
+  ENDMETHOD.
+
+  METHOD set_svg.
+    me->svg = svg.
   ENDMETHOD.
 
 ENDCLASS.

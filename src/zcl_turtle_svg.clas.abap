@@ -30,7 +30,7 @@ CLASS zcl_turtle_svg DEFINITION
       END OF circle_params.
 
     CLASS-METHODS:
-      create
+      new
         IMPORTING turtle        TYPE REF TO zcl_turtle
         RETURNING VALUE(result) TYPE REF TO zcl_turtle_svg.
 
@@ -62,13 +62,13 @@ ENDCLASS.
 
 CLASS zcl_turtle_svg IMPLEMENTATION.
 
-  METHOD create.
+  METHOD new.
     result = NEW #( ).
     result->turtle = turtle.
   ENDMETHOD.
 
   METHOD line.
-    svg_line = |<line x1="{ params-x_from }" y1="{ params-y_from }" x2="{ params-x_to }" y2="{ params-y_to }"|
+    svg_line = |<line x1="{ params-x_from }" y1="{ params-y_from }" x2="{ params-x_to }" y2="{ params-y_to }" |
       && |stroke="{ turtle->pen-stroke_color }" stroke-width="{ turtle->pen-stroke_width }"/>|.
   ENDMETHOD.
 
@@ -79,7 +79,8 @@ CLASS zcl_turtle_svg IMPLEMENTATION.
       NEXT res = res && |{ point-x },{ point-y } | ).
 
     svg_polygon = |<polygon points="{ point_data }"|
-      && | stroke="{ turtle->pen-stroke_color }" stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
+      && | stroke="{ turtle->pen-stroke_color }"|
+      && | stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
 
   ENDMETHOD.
 
@@ -90,13 +91,15 @@ CLASS zcl_turtle_svg IMPLEMENTATION.
       NEXT res = res && |{ point-x },{ point-y } | ).
 
     svg_polyline = |<polyline points="{ point_data }"|
-      && | stroke="{ turtle->pen-stroke_color }" stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
+      && |stroke="{ turtle->pen-stroke_color }" |
+      && |stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
 
   ENDMETHOD.
 
   METHOD circle.
     svg_circle = |<circle cx="{ params-center_x }" cy="{ params-center_y }" r="{ params-radius }" |
-        && |stroke="{ turtle->pen-stroke_color }" stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }"/>|.
+        && |stroke="{ turtle->pen-stroke_color }" |
+        && |stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }"/>|.
   ENDMETHOD.
 
   METHOD text.
