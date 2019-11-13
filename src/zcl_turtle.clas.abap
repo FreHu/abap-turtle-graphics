@@ -35,9 +35,10 @@ CLASS zcl_turtle DEFINITION
     TYPES: multiple_turtles TYPE STANDARD TABLE OF REF TO zcl_turtle.
 
     CLASS-METHODS new
-      IMPORTING height        TYPE i DEFAULT defaults-height
-                width         TYPE i DEFAULT defaults-width
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+      IMPORTING height           TYPE i DEFAULT defaults-height
+                width            TYPE i DEFAULT defaults-width
+                background_color TYPE zcl_turtle_colors=>rgb_hex_color OPTIONAL
+      RETURNING VALUE(turtle)    TYPE REF TO zcl_turtle.
 
     "! Creates a new turtle based on an existing instance. The position, angle and pen are preserved.
     "! Does not preserve content.
@@ -51,8 +52,9 @@ CLASS zcl_turtle DEFINITION
       RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
 
     METHODS constructor
-      IMPORTING height TYPE i
-                width  TYPE i.
+      IMPORTING height           TYPE i
+                width            TYPE i
+                background_color TYPE zcl_turtle_colors=>rgb_hex_color OPTIONAL.
 
     METHODS right
       IMPORTING degrees       TYPE f
@@ -109,13 +111,13 @@ CLASS zcl_turtle DEFINITION
       set_height IMPORTING height TYPE i,
       set_svg IMPORTING svg TYPE string.
 
-    DATA: svg           TYPE string READ-ONLY,
-          width         TYPE i READ-ONLY,
-          height        TYPE i READ-ONLY,
-          position      TYPE turtle_position READ-ONLY,
-          pen           TYPE t_pen READ-ONLY,
-          color_scheme  TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY,
-          svg_builder TYPE REF TO zcl_turtle_svg READ-ONLY.
+    DATA: svg          TYPE string READ-ONLY,
+          width        TYPE i READ-ONLY,
+          height       TYPE i READ-ONLY,
+          position     TYPE turtle_position READ-ONLY,
+          pen          TYPE t_pen READ-ONLY,
+          color_scheme TYPE zcl_turtle_colors=>rgb_hex_colors READ-ONLY,
+          svg_builder  TYPE REF TO zcl_turtle_svg READ-ONLY.
 
   PRIVATE SECTION.
     DATA use_random_colors TYPE abap_bool.
@@ -134,7 +136,7 @@ ENDCLASS.
 CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD new.
-    turtle = NEW zcl_turtle( width = width height = height ).
+    turtle = NEW zcl_turtle( width = width height = height background_color = background_color ).
   ENDMETHOD.
 
 
@@ -221,14 +223,31 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD constructor.
     me->width = width.
     me->height = height.
+    me->color_scheme = zcl_turtle_colors=>default_color_scheme.
+    me->use_random_colors = abap_true.
+    me->svg_builder = zcl_turtle_svg=>new( me ).
+
+    IF background_color IS NOT INITIAL.
+      me->set_pen( VALUE #( fill_color = background_color ) ).
+      DATA(side_length) = 100.
+
+      DATA(points) = VALUE t_points(
+        ( x = 0 y = 0 )
+        ( x = 0 + width y = 0 )
+        ( x = 0 + width y = 0 + height )
+        ( x = 0   y = 0 + height )
+      ).
+
+      me->append_svg(
+        me->svg_builder->polyline( VALUE #( points = points ) )
+      ).
+    ENDIF.
+
     me->pen = VALUE #(
      stroke_width = 1
      stroke_color = `#FF0000`
      is_up = abap_false
    ).
-    me->color_scheme = zcl_turtle_colors=>default_color_scheme.
-    me->use_random_colors = abap_true.
-    me->svg_builder = zcl_turtle_svg=>new( me ).
   ENDMETHOD.
 
   METHOD get_position.
