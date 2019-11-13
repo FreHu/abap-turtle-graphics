@@ -8,6 +8,7 @@ CLASS zcl_turtle DEFINITION
       BEGIN OF defaults,
         height TYPE i VALUE 800,
         width  TYPE i VALUE 600,
+        title  TYPE string VALUE `abapTurtle`,
       END OF defaults.
 
     TYPES:
@@ -38,6 +39,7 @@ CLASS zcl_turtle DEFINITION
       IMPORTING height           TYPE i DEFAULT defaults-height
                 width            TYPE i DEFAULT defaults-width
                 background_color TYPE zcl_turtle_colors=>rgb_hex_color OPTIONAL
+                title            TYPE string DEFAULT defaults-title
       RETURNING VALUE(turtle)    TYPE REF TO zcl_turtle.
 
     "! Creates a new turtle based on an existing instance. The position, angle and pen are preserved.
@@ -54,7 +56,8 @@ CLASS zcl_turtle DEFINITION
     METHODS constructor
       IMPORTING height           TYPE i
                 width            TYPE i
-                background_color TYPE zcl_turtle_colors=>rgb_hex_color OPTIONAL.
+                background_color TYPE zcl_turtle_colors=>rgb_hex_color OPTIONAL
+                title            TYPE string.
 
     METHODS right
       IMPORTING degrees       TYPE f
@@ -111,7 +114,8 @@ CLASS zcl_turtle DEFINITION
       set_height IMPORTING height TYPE i,
       set_svg IMPORTING svg TYPE string.
 
-    DATA: svg          TYPE string READ-ONLY,
+    DATA: title        TYPE string READ-ONLY,
+          svg          TYPE string READ-ONLY,
           width        TYPE i READ-ONLY,
           height       TYPE i READ-ONLY,
           position     TYPE turtle_position READ-ONLY,
@@ -136,7 +140,7 @@ ENDCLASS.
 CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD new.
-    turtle = NEW zcl_turtle( width = width height = height background_color = background_color ).
+    turtle = NEW zcl_turtle( width = width height = height background_color = background_color title = title ).
   ENDMETHOD.
 
 
@@ -223,6 +227,7 @@ CLASS zcl_turtle IMPLEMENTATION.
   METHOD constructor.
     me->width = width.
     me->height = height.
+    me->title = title.
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
     me->use_random_colors = abap_true.
     me->svg_builder = zcl_turtle_svg=>new( me ).
@@ -305,7 +310,7 @@ CLASS zcl_turtle IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD get_html.
-    html = |<html><body><h1>abapTurtle</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>|.
+    html = |<html><body><h1>{ title }</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>|.
   ENDMETHOD.
 
   METHOD disable_random_colors.
@@ -330,6 +335,7 @@ CLASS zcl_turtle IMPLEMENTATION.
     turtle = NEW #(
       width = existing_turtle->width
       height = existing_turtle->height
+      title = existing_turtle->title
     ).
 
     turtle->set_pen( existing_turtle->pen ).

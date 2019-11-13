@@ -13,7 +13,7 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
 
   METHOD koch_curve.
 
-    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 title = |Koch curve| ).
     turtle->goto( x = 200 y = 200 ).
     DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
       initial_state = `F`
