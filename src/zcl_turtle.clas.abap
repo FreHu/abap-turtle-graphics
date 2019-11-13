@@ -344,7 +344,9 @@ CLASS zcl_turtle IMPLEMENTATION.
 
   METHOD compose.
 
-    ASSERT lines( turtles ) >= 1.
+    IF lines( turtles ) < 1.
+      zcx_turtle_problem=>raise( `Not enough turtles to compose anything.` ).
+    ENDIF.
 
     " start where the last one left off
     turtle = zcl_turtle=>from_existing( turtles[ lines( turtles ) ] ).

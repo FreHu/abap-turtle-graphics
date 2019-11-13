@@ -4,26 +4,37 @@ CLASS zcl_turtle_lsystem DEFINITION
   PUBLIC SECTION.
     TYPES:
       BEGIN OF lsystem_rewrite_rule,
+        "! Original string
         from TYPE string,
+        "! New string
         to   TYPE string,
       END OF lsystem_rewrite_rule,
       lsystem_rewrite_rules TYPE STANDARD TABLE OF lsystem_rewrite_rule WITH DEFAULT KEY.
 
+    TYPES: lsystem_instruction_kind TYPE string.
     CONSTANTS:
       BEGIN OF instruction_kind,
-        noop       TYPE string VALUE `noop`,
-        forward    TYPE string VALUE `forwrad`,
-        back       TYPE string VALUE `back`,
-        left       TYPE string VALUE `left`,
-        right      TYPE string VALUE `right`,
-        stack_push TYPE string VALUE `stack_push`,
-        stack_pop  TYPE string VALUE `stack_pop`,
+        "! Doesn't do anything. Can be used for helper symbols.
+        noop       TYPE lsystem_instruction_kind VALUE `noop`,
+        "! Go forward by 'amount' pixels
+        forward    TYPE lsystem_instruction_kind VALUE `forwrad`,
+        "! Go back by 'amount' pixels
+        back       TYPE lsystem_instruction_kind VALUE `back`,
+        "! Turn left by 'amount' degrees
+        left       TYPE lsystem_instruction_kind VALUE `left`,
+        "! Turn right by 'amount' degrees
+        right      TYPE lsystem_instruction_kind VALUE `right`,
+        "! Push position on the stack
+        stack_push TYPE lsystem_instruction_kind VALUE `stack_push`,
+        "! Pop position from the stack
+        stack_pop  TYPE lsystem_instruction_kind VALUE `stack_pop`,
       END OF instruction_kind.
 
     TYPES:
       BEGIN OF lsystem_instruction,
         symbol TYPE c1,
-        kind   TYPE string,
+        kind   TYPE lsystem_instruction_kind,
+        "! Distance or angle (if the operation requires it)
         amount TYPE i,
       END OF lsystem_instruction,
       lsystem_instructions TYPE HASHED TABLE OF lsystem_instruction WITH UNIQUE KEY symbol.
@@ -77,7 +88,8 @@ CLASS zcl_turtle_lsystem IMPLEMENTATION.
 
     DATA(index) = 0.
     WHILE index < strlen( final_value ).
-      DATA(rule) = VALUE #( parameters-instructions[ symbol = final_value+index(1) ] OPTIONAL ).
+      DATA(symbol) = final_value+index(1).
+      DATA(rule) = VALUE #( parameters-instructions[ symbol = symbol ] OPTIONAL ).
       CASE rule-kind.
         WHEN instruction_kind-noop.
           CONTINUE.
@@ -96,7 +108,7 @@ CLASS zcl_turtle_lsystem IMPLEMENTATION.
           turtle->goto( x = position-x y = position-y ).
           turtle->set_angle( position-angle ).
         WHEN OTHERS.
-          ASSERT 1 = 0.
+          zcx_turtle_problem=>raise( |Lsystem - uncnofigured symbol { symbol }.| ).
       ENDCASE.
 
       index = index + 1.
