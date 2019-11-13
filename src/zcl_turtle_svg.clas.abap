@@ -59,7 +59,6 @@ CLASS zcl_turtle_svg DEFINITION
 ENDCLASS.
 
 
-
 CLASS zcl_turtle_svg IMPLEMENTATION.
 
   METHOD new.
