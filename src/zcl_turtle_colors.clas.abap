@@ -19,7 +19,6 @@ CLASS zcl_turtle_colors DEFINITION
 ENDCLASS.
 
 
-
 CLASS zcl_turtle_colors IMPLEMENTATION.
 
   METHOD class_constructor.
