@@ -9,16 +9,32 @@ CLASS zcl_turtle_lsystem DEFINITION
       END OF lsystem_rewrite_rule,
       lsystem_rewrite_rules TYPE STANDARD TABLE OF lsystem_rewrite_rule WITH DEFAULT KEY.
 
+    CONSTANTS:
+      BEGIN OF instruction_kind,
+        noop       TYPE string VALUE `noop`,
+        forward    TYPE string VALUE `forwrad`,
+        back       TYPE string VALUE `back`,
+        left       TYPE string VALUE `left`,
+        right      TYPE string VALUE `right`,
+        stack_push TYPE string VALUE `stack_push`,
+        stack_pop  TYPE string VALUE `stack_pop`,
+      END OF instruction_kind.
+
+    TYPES:
+      BEGIN OF lsystem_instruction,
+        symbol TYPE c1,
+        kind   TYPE string,
+        amount TYPE i,
+      END OF lsystem_instruction,
+      lsystem_instructions TYPE HASHED TABLE OF lsystem_instruction WITH UNIQUE KEY symbol.
+
     TYPES:
       BEGIN OF params,
         "! Starting symbols
         initial_state  TYPE string,
         "! How many times the rewrite rules will be applied
         num_iterations TYPE i,
-        "! For move instructions, how many pixels to move by
-        move_distance  TYPE i,
-        "! For rotate instructions, how many degrees to rotate by
-        rotate_by      TYPE f,
+        instructions   TYPE lsystem_instructions,
         "! A list of rewrite patterns which will be applied each iteration in order.
         "! E.g. initial state F with rule F -> FG and 3 iterations
         "! will produce FG, FGG, FGGG in each iteration respectively.
@@ -61,21 +77,26 @@ CLASS zcl_turtle_lsystem IMPLEMENTATION.
 
     DATA(index) = 0.
     WHILE index < strlen( final_value ).
-      DATA(char) = final_value+index(1).
-
-      CASE char.
-        WHEN `F` OR `G` OR `H`.
-          turtle->forward( parameters-move_distance ).
-        WHEN `+`.
-          turtle->right( parameters-rotate_by ).
-        WHEN `-`.
-          turtle->left( parameters-rotate_by ).
-        WHEN `[`.
+      DATA(rule) = VALUE #( parameters-instructions[ symbol = final_value+index(1) ] OPTIONAL ).
+      CASE rule-kind.
+        WHEN instruction_kind-noop.
+          CONTINUE.
+        WHEN instruction_kind-forward.
+          turtle->forward( rule-amount ).
+        WHEN instruction_kind-back.
+          turtle->back( rule-amount ).
+        WHEN instruction_kind-left.
+          turtle->right( CONV f( rule-amount ) ).
+        WHEN instruction_kind-right.
+          turtle->left( CONV f( rule-amount ) ).
+        WHEN instruction_kind-stack_push.
           push_stack( turtle->position ).
-        WHEN `]`.
+        WHEN instruction_kind-stack_pop.
           DATA(position) = pop_stack( ).
           turtle->goto( x = position-x y = position-y ).
           turtle->set_angle( position-angle ).
+        WHEN OTHERS.
+          ASSERT 1 = 0.
       ENDCASE.
 
       index = index + 1.

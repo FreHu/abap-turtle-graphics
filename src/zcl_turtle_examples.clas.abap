@@ -21,7 +21,9 @@ CLASS zcl_turtle_examples IMPLEMENTATION.
 
   METHOD polygon_flower.
     turtle = zcl_turtle=>new( height = 800 width = 800 ).
-    turtle->text( |Polygons:{ polygons } Sides: { polygon_sides }| ).
+
+    turtle->append_svg( turtle->svg_builder->text( VALUE #(
+      text = |Polygons:{ polygons } Sides: { polygon_sides }| ) ) ).
 
     turtle->goto( x = 200 y = 200 ).
     turtle->set_pen( VALUE #(
@@ -66,7 +68,9 @@ CLASS zcl_turtle_examples IMPLEMENTATION.
       ( x = start-x y = start-y + side_length )
     ).
 
-    turtle->polyline( points ).
+    turtle->append_svg(
+      turtle->svg_builder->polyline( VALUE #( points = points ) )
+    ).
   ENDMETHOD.
 
   METHOD polygon_using_lines.
@@ -86,6 +90,5 @@ CLASS zcl_turtle_examples IMPLEMENTATION.
       i = i + 1.
     ENDWHILE.
   ENDMETHOD.
-
 
 ENDCLASS.
