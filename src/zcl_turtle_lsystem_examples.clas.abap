@@ -1,77 +1,77 @@
-CLASS zcl_turtle_lsystem_examples DEFINITION
-  PUBLIC FINAL.
+class zcl_turtle_lsystem_examples definition
+  public final.
 
-  PUBLIC SECTION.
-    CLASS-METHODS koch_curve.
-    CLASS-METHODS pattern.
-    CLASS-METHODS plant.
-    CLASS-METHODS plant_2.
+  public section.
+    class-methods koch_curve.
+    class-methods pattern.
+    class-methods plant.
+    class-methods plant_2.
 
-ENDCLASS.
+endclass.
 
-CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
+class zcl_turtle_lsystem_examples implementation.
 
-  METHOD koch_curve.
+  method koch_curve.
 
-    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 title = |Koch curve| ).
+    data(turtle) = zcl_turtle=>new( height = 800 width = 600 title = |Koch curve| ).
     turtle->goto( x = 200 y = 200 ).
-    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
+    data(parameters) = value zcl_turtle_lsystem=>params(
       initial_state = `F`
-      instructions = VALUE #(
+      instructions = value #(
         ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
         ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
         ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 )
       )
       num_iterations = 3
-      rewrite_rules = VALUE #(
+      rewrite_rules = value #(
         ( from = `F` to = `F+F-F-F+F` )
       )
     ).
 
-    DATA(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>new(
       turtle = turtle
       parameters = parameters ).
 
     lsystem->execute( ).
     lsystem->show( ).
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD pattern.
-    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+  method pattern.
+    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
     turtle->goto( x = 200 y = 200 ).
 
-    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
+    data(parameters) = value zcl_turtle_lsystem=>params(
       initial_state = `F-F-F-F`
-      instructions = VALUE #(
+      instructions = value #(
         ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
         ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
         ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 ) )
       num_iterations = 3
-      rewrite_rules = VALUE #(
+      rewrite_rules = value #(
         ( from = `F` to = `FF-F+F-F-FF` )
        )
     ).
 
-    DATA(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>new(
       turtle = turtle
       parameters = parameters ).
 
     lsystem->execute( ).
     lsystem->show( ).
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD plant.
-    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+  method plant.
+    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
     turtle->goto( x = 300 y = 600 ).
     turtle->set_angle( -90 ).
 
-    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
-      LET distance = 10
-          rotation = 25 IN
+    data(parameters) = value zcl_turtle_lsystem=>params(
+      let distance = 10
+          rotation = 25 in
       initial_state = `F`
-      instructions = VALUE #(
+      instructions = value #(
         ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = distance )
         ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = rotation )
         ( symbol = `-` kind = zcl_turtle_lsystem=>instruction_kind-left amount = rotation )
@@ -79,27 +79,27 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
         ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
       )
       num_iterations = 5
-      rewrite_rules = VALUE #(
+      rewrite_rules = value #(
         ( from = `F` to = `F[+F]F[-F][F]` )
        )
     ).
 
-    DATA(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>new(
       turtle = turtle
       parameters = parameters ).
 
     lsystem->execute( ).
     lsystem->show( ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD plant_2.
-    DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+  method plant_2.
+    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
     turtle->goto( x = 300 y = 600 ).
     turtle->set_angle( -90 ).
 
-    DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
+    data(parameters) = value zcl_turtle_lsystem=>params(
       initial_state = `F`
-      instructions = VALUE #(
+      instructions = value #(
         ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
         ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = 21 )
         ( symbol = `-` kind = zcl_turtle_lsystem=>instruction_kind-left amount = 21 )
@@ -107,17 +107,17 @@ CLASS zcl_turtle_lsystem_examples IMPLEMENTATION.
         ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
       )
       num_iterations = 4
-      rewrite_rules = VALUE #(
+      rewrite_rules = value #(
         ( from = `F` to = `FF-[+F+F+F]+[-F-F+F]` )
        )
     ).
 
-    DATA(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>new(
       turtle = turtle
       parameters = parameters ).
 
     lsystem->execute( ).
     lsystem->show( ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

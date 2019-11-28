@@ -1,26 +1,26 @@
-CLASS zcl_number_range DEFINITION
-  PUBLIC FINAL.
+class zcl_number_range definition
+  public final.
 
-  PUBLIC SECTION.
-    TYPES: number_range TYPE STANDARD TABLE OF i WITH EMPTY KEY.
+  public section.
+    types: number_range type standard table of i with empty key.
 
     "! Returns the list of numbers &lt;min, max).
     "! This method repeats the mistake of Python 2.x and will consume a lot of memory if used with large ranges
-    CLASS-METHODS get
-      IMPORTING min           TYPE i
-                max           TYPE i
-      RETURNING VALUE(result) TYPE number_range.
+    class-methods get
+      importing min           type i
+                max           type i
+      returning value(result) type number_range.
 
-ENDCLASS.
+endclass.
 
-CLASS zcl_number_range IMPLEMENTATION.
+class zcl_number_range implementation.
 
-  METHOD get.
-    DATA(i) = min.
-    WHILE i < max.
-      APPEND i TO result.
+  method get.
+    data(i) = min.
+    while i < max.
+      append i to result.
       i = i + 1.
-    ENDWHILE.
-  ENDMETHOD.
+    endwhile.
+  endmethod.
 
-ENDCLASS.
+endclass.

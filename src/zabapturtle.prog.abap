@@ -1,16 +1,16 @@
-REPORT zabapturtle.
+report zabapturtle.
 
 " square using movement
-DATA(turtle) = zcl_turtle=>new( width = 640 height = 480 ).
+data(turtle) = zcl_turtle=>new( width = 640 height = 480 ).
 turtle->goto( x = 100 y = 100 ).
-DO 4 TIMES.
+do 4 times.
   turtle->forward( 100 ).
   turtle->right( 90 ).
-ENDDO.
+enddo.
 turtle->show( ).
 
 " square using a polyline
-DATA(square) = zcl_turtle_examples=>filled_square( ).
+data(square) = zcl_turtle_examples=>filled_square( ).
 square->show(  ).
 
 " shape composed of multiple polygons
@@ -20,10 +20,10 @@ zcl_turtle_examples=>polygon_flower(
 )->show( ).
 
 " usage for "functional" programmers. this will open a few windows
-TYPES: turtles TYPE STANDARD TABLE OF REF TO zcl_turtle WITH EMPTY KEY.
-DATA(more_examples) = VALUE turtles(
-  FOR polygons IN zcl_number_range=>get( min = 12 max = 15 )
-  FOR polygon_sides IN zcl_number_range=>get( min = 8 max = 10 )
+types: turtles type standard table of ref to zcl_turtle with empty key.
+data(more_examples) = value turtles(
+  for polygons in zcl_number_range=>get( min = 12 max = 15 )
+  for polygon_sides in zcl_number_range=>get( min = 8 max = 10 )
   ( zcl_turtle_examples=>polygon_flower(
       polygons = polygons
       polygon_sides = polygon_sides

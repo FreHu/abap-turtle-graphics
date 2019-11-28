@@ -1,22 +1,22 @@
-CLASS lcl_tests DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+class lcl_tests definition final for testing
+  duration short
+  risk level harmless.
 
-  PRIVATE SECTION.
-    METHODS: todo_rename FOR TESTING RAISING cx_static_check.
+  private section.
+    methods: todo_rename for testing raising cx_static_check.
 
-ENDCLASS.
+endclass.
 
 
-CLASS lcl_tests IMPLEMENTATION.
+class lcl_tests implementation.
 
-  METHOD todo_rename.
-    DATA(values) = VALUE zcl_turtle_math=>numbers_i(
+  method todo_rename.
+    data(values) = value zcl_turtle_math=>numbers_i(
       ( 1 ) ( 2 ) ( 10 ) ( 5 ) ( -4 ) ).
 
-    DATA(result) = zcl_turtle_math=>find_max_int( values ).
+    data(result) = zcl_turtle_math=>find_max_int( values ).
 
     cl_abap_unit_assert=>assert_equals( exp = 10 act = result ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

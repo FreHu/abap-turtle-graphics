@@ -1,27 +1,27 @@
-CLASS zcl_turtle_convert DEFINITION
-  PUBLIC FINAL.
+class zcl_turtle_convert definition
+  public final.
 
-  PUBLIC SECTION.
-    CONSTANTS: pi TYPE f VALUE '3.14159265359'.
+  public section.
+    constants: pi type f value '3.14159265359'.
 
-    CLASS-METHODS degrees_to_radians
-      IMPORTING degrees        TYPE f
-      RETURNING VALUE(radians) TYPE f.
+    class-methods degrees_to_radians
+      importing degrees        type f
+      returning value(radians) type f.
 
-    CLASS-METHODS radians_to_degrees
-      IMPORTING radians        TYPE f
-      RETURNING VALUE(degrees) TYPE f.
+    class-methods radians_to_degrees
+      importing radians        type f
+      returning value(degrees) type f.
 
-ENDCLASS.
+endclass.
 
-CLASS zcl_turtle_convert IMPLEMENTATION.
+class zcl_turtle_convert implementation.
 
-  METHOD degrees_to_radians.
+  method degrees_to_radians.
     radians = ( degrees * pi ) / 180.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD radians_to_degrees.
+  method radians_to_degrees.
     degrees = radians * ( 180 / pi ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

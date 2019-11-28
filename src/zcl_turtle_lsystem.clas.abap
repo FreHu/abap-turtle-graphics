@@ -1,144 +1,144 @@
-CLASS zcl_turtle_lsystem DEFINITION
-  PUBLIC FINAL.
+class zcl_turtle_lsystem definition
+  public final.
 
-  PUBLIC SECTION.
-    TYPES:
-      BEGIN OF lsystem_rewrite_rule,
+  public section.
+    types:
+      begin of lsystem_rewrite_rule,
         "! Original string
-        from TYPE string,
+        from type string,
         "! New string
-        to   TYPE string,
-      END OF lsystem_rewrite_rule,
-      lsystem_rewrite_rules TYPE STANDARD TABLE OF lsystem_rewrite_rule WITH DEFAULT KEY.
+        to   type string,
+      end of lsystem_rewrite_rule,
+      lsystem_rewrite_rules type standard table of lsystem_rewrite_rule with default key.
 
-    TYPES: lsystem_instruction_kind TYPE string.
-    CONSTANTS:
-      BEGIN OF instruction_kind,
+    types: lsystem_instruction_kind type string.
+    constants:
+      begin of instruction_kind,
         "! Doesn't do anything. Can be used for helper symbols.
-        noop       TYPE lsystem_instruction_kind VALUE `noop`,
+        noop       type lsystem_instruction_kind value `noop`,
         "! Go forward by 'amount' pixels
-        forward    TYPE lsystem_instruction_kind VALUE `forwrad`,
+        forward    type lsystem_instruction_kind value `forwrad`,
         "! Go back by 'amount' pixels
-        back       TYPE lsystem_instruction_kind VALUE `back`,
+        back       type lsystem_instruction_kind value `back`,
         "! Turn left by 'amount' degrees
-        left       TYPE lsystem_instruction_kind VALUE `left`,
+        left       type lsystem_instruction_kind value `left`,
         "! Turn right by 'amount' degrees
-        right      TYPE lsystem_instruction_kind VALUE `right`,
+        right      type lsystem_instruction_kind value `right`,
         "! Push position on the stack
-        stack_push TYPE lsystem_instruction_kind VALUE `stack_push`,
+        stack_push type lsystem_instruction_kind value `stack_push`,
         "! Pop position from the stack
-        stack_pop  TYPE lsystem_instruction_kind VALUE `stack_pop`,
-      END OF instruction_kind.
+        stack_pop  type lsystem_instruction_kind value `stack_pop`,
+      end of instruction_kind.
 
-    TYPES:
-      BEGIN OF lsystem_instruction,
-        symbol TYPE c1,
-        kind   TYPE lsystem_instruction_kind,
+    types:
+      begin of lsystem_instruction,
+        symbol type c1,
+        kind   type lsystem_instruction_kind,
         "! Distance or angle (if the operation requires it)
-        amount TYPE i,
-      END OF lsystem_instruction,
-      lsystem_instructions TYPE HASHED TABLE OF lsystem_instruction WITH UNIQUE KEY symbol.
+        amount type i,
+      end of lsystem_instruction,
+      lsystem_instructions type hashed table of lsystem_instruction with unique key symbol.
 
-    TYPES:
-      BEGIN OF params,
+    types:
+      begin of params,
         "! Starting symbols
-        initial_state  TYPE string,
+        initial_state  type string,
         "! How many times the rewrite rules will be applied
-        num_iterations TYPE i,
-        instructions   TYPE lsystem_instructions,
+        num_iterations type i,
+        instructions   type lsystem_instructions,
         "! A list of rewrite patterns which will be applied each iteration in order.
         "! E.g. initial state F with rule F -> FG and 3 iterations
         "! will produce FG, FGG, FGGG in each iteration respectively.
         "! Currently allows up to 3 variables F,G,H
-        rewrite_rules  TYPE lsystem_rewrite_rules,
-      END OF params.
+        rewrite_rules  type lsystem_rewrite_rules,
+      end of params.
 
-    CLASS-METHODS new
-      IMPORTING turtle        TYPE REF TO zcl_turtle
-                parameters    TYPE params
-      RETURNING VALUE(result) TYPE REF TO zcl_turtle_lsystem.
+    class-methods new
+      importing turtle        type ref to zcl_turtle
+                parameters    type params
+      returning value(result) type ref to zcl_turtle_lsystem.
 
-    METHODS execute.
-    METHODS show.
+    methods execute.
+    methods show.
 
-  PRIVATE SECTION.
-    METHODS get_final_value
-      RETURNING VALUE(result) TYPE string.
+  private section.
+    methods get_final_value
+      returning value(result) type string.
 
-    TYPES: t_position_stack TYPE STANDARD TABLE OF zcl_turtle=>turtle_position WITH EMPTY KEY.
-    METHODS:
-      push_stack IMPORTING position TYPE zcl_turtle=>turtle_position,
-      pop_stack RETURNING VALUE(position) TYPE zcl_turtle=>turtle_position.
+    types: t_position_stack type standard table of zcl_turtle=>turtle_position with empty key.
+    methods:
+      push_stack importing position type zcl_turtle=>turtle_position,
+      pop_stack returning value(position) type zcl_turtle=>turtle_position.
 
-    DATA: turtle TYPE REF TO zcl_turtle.
-    DATA: parameters TYPE params.
-    DATA: position_stack TYPE t_position_stack.
-ENDCLASS.
+    data: turtle type ref to zcl_turtle.
+    data: parameters type params.
+    data: position_stack type t_position_stack.
+endclass.
 
-CLASS zcl_turtle_lsystem IMPLEMENTATION.
+class zcl_turtle_lsystem implementation.
 
-  METHOD new.
-    result = NEW #( ).
+  method new.
+    result = new #( ).
     result->turtle = turtle.
     result->parameters = parameters.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD execute.
-    DATA(final_value) = get_final_value( ).
+  method execute.
+    data(final_value) = get_final_value( ).
 
-    DATA(index) = 0.
-    WHILE index < strlen( final_value ).
-      DATA(symbol) = final_value+index(1).
-      DATA(rule) = VALUE #( parameters-instructions[ symbol = symbol ] OPTIONAL ).
-      CASE rule-kind.
-        WHEN instruction_kind-noop.
-          CONTINUE.
-        WHEN instruction_kind-forward.
+    data(index) = 0.
+    while index < strlen( final_value ).
+      data(symbol) = final_value+index(1).
+      data(rule) = value #( parameters-instructions[ symbol = symbol ] optional ).
+      case rule-kind.
+        when instruction_kind-noop.
+          continue.
+        when instruction_kind-forward.
           turtle->forward( rule-amount ).
-        WHEN instruction_kind-back.
+        when instruction_kind-back.
           turtle->back( rule-amount ).
-        WHEN instruction_kind-left.
-          turtle->right( CONV f( rule-amount ) ).
-        WHEN instruction_kind-right.
-          turtle->left( CONV f( rule-amount ) ).
-        WHEN instruction_kind-stack_push.
+        when instruction_kind-left.
+          turtle->right( conv f( rule-amount ) ).
+        when instruction_kind-right.
+          turtle->left( conv f( rule-amount ) ).
+        when instruction_kind-stack_push.
           push_stack( turtle->position ).
-        WHEN instruction_kind-stack_pop.
-          DATA(position) = pop_stack( ).
+        when instruction_kind-stack_pop.
+          data(position) = pop_stack( ).
           turtle->goto( x = position-x y = position-y ).
           turtle->set_angle( position-angle ).
-        WHEN OTHERS.
+        when others.
           zcx_turtle_problem=>raise( |Lsystem - uncnofigured symbol { symbol }.| ).
-      ENDCASE.
+      endcase.
 
       index = index + 1.
-    ENDWHILE.
+    endwhile.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD show.
+  method show.
     turtle->show( ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD get_final_value.
-    DATA(instructions) = parameters-initial_state.
-    DO parameters-num_iterations TIMES.
-      LOOP AT parameters-rewrite_rules ASSIGNING FIELD-SYMBOL(<rule>).
-        REPLACE ALL OCCURRENCES OF <rule>-from IN instructions
-          WITH <rule>-to.
-      ENDLOOP.
-    ENDDO.
+  method get_final_value.
+    data(instructions) = parameters-initial_state.
+    do parameters-num_iterations times.
+      loop at parameters-rewrite_rules assigning field-symbol(<rule>).
+        replace all occurrences of <rule>-from in instructions
+          with <rule>-to.
+      endloop.
+    enddo.
 
     result = instructions.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD pop_stack.
+  method pop_stack.
     position = position_stack[ lines( position_stack ) ].
-    DELETE position_stack INDEX lines( position_stack ).
-  ENDMETHOD.
+    delete position_stack index lines( position_stack ).
+  endmethod.
 
-  METHOD push_stack.
-    APPEND position TO position_stack.
-  ENDMETHOD.
+  method push_stack.
+    append position to position_stack.
+  endmethod.
 
-ENDCLASS.
+endclass.

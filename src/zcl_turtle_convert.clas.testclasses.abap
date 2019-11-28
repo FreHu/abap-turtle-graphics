@@ -1,36 +1,36 @@
-CLASS lcl_tests DEFINITION FINAL FOR TESTING
-  DURATION SHORT
-  RISK LEVEL HARMLESS.
+class lcl_tests definition final for testing
+  duration short
+  risk level harmless.
 
-  PRIVATE SECTION.
-    DATA: f_cut TYPE REF TO zcl_turtle_convert.
+  private section.
+    data: f_cut type ref to zcl_turtle_convert.
 
-    METHODS:
+    methods:
       setup,
-      degrees_to_radians FOR TESTING RAISING cx_static_check,
-      radians_to_degrees FOR TESTING RAISING cx_static_check.
+      degrees_to_radians for testing raising cx_static_check,
+      radians_to_degrees for testing raising cx_static_check.
 
-ENDCLASS.
+endclass.
 
 
-CLASS lcl_tests IMPLEMENTATION.
+class lcl_tests implementation.
 
-  METHOD setup.
-    f_cut = NEW #( ).
-  ENDMETHOD.
+  method setup.
+    f_cut = new #( ).
+  endmethod.
 
-  METHOD degrees_to_radians.
-    DATA(result) = zcl_turtle_convert=>degrees_to_radians(
+  method degrees_to_radians.
+    data(result) = zcl_turtle_convert=>degrees_to_radians(
       degrees = 180 ).
 
     cl_abap_unit_assert=>assert_equals( exp = zcl_turtle_convert=>pi act = result tol = `0.000000000000001` ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD radians_to_degrees.
-    DATA(result) = zcl_turtle_convert=>radians_to_degrees(
+  method radians_to_degrees.
+    data(result) = zcl_turtle_convert=>radians_to_degrees(
       radians = 2 * zcl_turtle_convert=>pi ).
 
     cl_abap_unit_assert=>assert_equals( exp = 360 act = result ).
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

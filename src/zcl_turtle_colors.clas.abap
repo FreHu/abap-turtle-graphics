@@ -1,28 +1,28 @@
-CLASS zcl_turtle_colors DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class zcl_turtle_colors definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
-    TYPES: rgb_hex_color  TYPE string,
-           rgb_hex_colors TYPE STANDARD TABLE OF rgb_hex_color WITH EMPTY KEY.
+  public section.
+    types: rgb_hex_color  type string,
+           rgb_hex_colors type standard table of rgb_hex_color with empty key.
 
-    CLASS-METHODS class_constructor.
-    CLASS-METHODS get_random_color
-      IMPORTING colors       TYPE rgb_hex_colors
-      RETURNING VALUE(color) TYPE rgb_hex_color.
+    class-methods class_constructor.
+    class-methods get_random_color
+      importing colors       type rgb_hex_colors
+      returning value(color) type rgb_hex_color.
 
-    CLASS-DATA: default_color_scheme TYPE rgb_hex_colors.
-  PRIVATE SECTION.
-    CLASS-DATA: random TYPE REF TO cl_abap_random.
+    class-data: default_color_scheme type rgb_hex_colors.
+  private section.
+    class-data: random type ref to cl_abap_random.
 
-ENDCLASS.
+endclass.
 
 
-CLASS zcl_turtle_colors IMPLEMENTATION.
+class zcl_turtle_colors implementation.
 
-  METHOD class_constructor.
-    default_color_scheme = VALUE #(
+  method class_constructor.
+    default_color_scheme = value #(
       ( `#8a295c` )
       ( `#5bbc6d` )
       ( `#cb72d3` )
@@ -41,11 +41,11 @@ CLASS zcl_turtle_colors IMPLEMENTATION.
     ).
 
     random = cl_abap_random=>create( seed = 42 ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD get_random_color.
-    DATA(random_index) = random->intinrange( low = 1 high = lines( colors ) ).
+  method get_random_color.
+    data(random_index) = random->intinrange( low = 1 high = lines( colors ) ).
     color = colors[ random_index ].
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

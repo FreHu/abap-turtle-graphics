@@ -1,31 +1,30 @@
-CLASS zcl_turtle_math DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class zcl_turtle_math definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
-    TYPES: numbers_i TYPE STANDARD TABLE OF i WITH DEFAULT KEY.
+  public section.
+    types: numbers_i type standard table of i with default key.
 
-    CLASS-METHODS: find_max_int
-      IMPORTING numbers       TYPE numbers_i
-      RETURNING VALUE(result) TYPE i.
-
-
-ENDCLASS.
+    class-methods: find_max_int
+      importing numbers       type numbers_i
+      returning value(result) type i.
 
 
+endclass.
 
-CLASS zcl_turtle_math IMPLEMENTATION.
 
-  METHOD find_max_int.
-    DATA(max) = numbers[ 1 ].
-    LOOP AT numbers ASSIGNING FIELD-SYMBOL(<num>) FROM 2.
-      IF <num> > max.
+class zcl_turtle_math implementation.
+
+  method find_max_int.
+    data(max) = numbers[ 1 ].
+    loop at numbers assigning field-symbol(<num>) from 2.
+      if <num> > max.
         max = <num>.
-      ENDIF.
-    ENDLOOP.
+      endif.
+    endloop.
 
     result = max.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

@@ -1,108 +1,108 @@
-CLASS zcl_turtle_svg DEFINITION
-  PUBLIC FINAL
-  CREATE PRIVATE.
+class zcl_turtle_svg definition
+  public final
+  create private.
 
-  PUBLIC SECTION.
+  public section.
 
-    TYPES:
-      BEGIN OF line_params,
-        x_from TYPE i,
-        y_from TYPE i,
-        x_to   TYPE i,
-        y_to   TYPE i,
-      END OF line_params,
+    types:
+      begin of line_params,
+        x_from type i,
+        y_from type i,
+        x_to   type i,
+        y_to   type i,
+      end of line_params,
 
-      BEGIN OF polygon_params,
-        points TYPE zcl_turtle=>t_points,
-      END OF polygon_params,
-      polyline_params TYPE polygon_params,
+      begin of polygon_params,
+        points type zcl_turtle=>t_points,
+      end of polygon_params,
+      polyline_params type polygon_params,
 
-      BEGIN OF text_params,
-        x    TYPE i,
-        y    TYPE i,
-        text TYPE string,
-      END OF text_params,
+      begin of text_params,
+        x    type i,
+        y    type i,
+        text type string,
+      end of text_params,
 
-      BEGIN OF circle_params,
-        center_x TYPE i,
-        center_y TYPE i,
-        radius   TYPE i,
-      END OF circle_params.
+      begin of circle_params,
+        center_x type i,
+        center_y type i,
+        radius   type i,
+      end of circle_params.
 
-    CLASS-METHODS:
+    class-methods:
       new
-        IMPORTING turtle        TYPE REF TO zcl_turtle
-        RETURNING VALUE(result) TYPE REF TO zcl_turtle_svg.
+        importing turtle        type ref to zcl_turtle
+        returning value(result) type ref to zcl_turtle_svg.
 
-    METHODS:
+    methods:
       line
-        IMPORTING params          TYPE line_params
-        RETURNING VALUE(svg_line) TYPE string,
+        importing params          type line_params
+        returning value(svg_line) type string,
 
       polygon
-        IMPORTING params             TYPE polygon_params
-        RETURNING VALUE(svg_polygon) TYPE string,
+        importing params             type polygon_params
+        returning value(svg_polygon) type string,
 
       polyline
-        IMPORTING params              TYPE polyline_params
-        RETURNING VALUE(svg_polyline) TYPE string,
+        importing params              type polyline_params
+        returning value(svg_polyline) type string,
 
       text
-        IMPORTING params          TYPE text_params
-        RETURNING VALUE(svg_text) TYPE string,
+        importing params          type text_params
+        returning value(svg_text) type string,
 
       circle
-        IMPORTING params            TYPE circle_params
-        RETURNING VALUE(svg_circle) TYPE string.
+        importing params            type circle_params
+        returning value(svg_circle) type string.
 
-    DATA: turtle TYPE REF TO zcl_turtle READ-ONLY.
-ENDCLASS.
+    data: turtle type ref to zcl_turtle read-only.
+endclass.
 
 
-CLASS zcl_turtle_svg IMPLEMENTATION.
+class zcl_turtle_svg implementation.
 
-  METHOD new.
-    result = NEW #( ).
+  method new.
+    result = new #( ).
     result->turtle = turtle.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD line.
+  method line.
     svg_line = |<line x1="{ params-x_from }" y1="{ params-y_from }" x2="{ params-x_to }" y2="{ params-y_to }" |
       && |stroke="{ turtle->pen-stroke_color }" stroke-width="{ turtle->pen-stroke_width }"/>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD polygon.
-    DATA(point_data) = REDUCE string(
-      INIT res = ||
-      FOR point IN params-points
-      NEXT res = res && |{ point-x },{ point-y } | ).
+  method polygon.
+    data(point_data) = reduce string(
+      init res = ||
+      for point in params-points
+      next res = res && |{ point-x },{ point-y } | ).
 
     svg_polygon = |<polygon points="{ point_data }"|
       && | stroke="{ turtle->pen-stroke_color }"|
       && | stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD polyline.
-    DATA(point_data) = REDUCE string(
-      INIT res = ||
-      FOR point IN params-points
-      NEXT res = res && |{ point-x },{ point-y } | ).
+  method polyline.
+    data(point_data) = reduce string(
+      init res = ||
+      for point in params-points
+      next res = res && |{ point-x },{ point-y } | ).
 
     svg_polyline = |<polyline points="{ point_data }"|
       && |stroke="{ turtle->pen-stroke_color }" |
       && |stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }" />|.
 
-  ENDMETHOD.
+  endmethod.
 
-  METHOD circle.
+  method circle.
     svg_circle = |<circle cx="{ params-center_x }" cy="{ params-center_y }" r="{ params-radius }" |
         && |stroke="{ turtle->pen-stroke_color }" |
         && |stroke-width="{ turtle->pen-stroke_width }" fill="{ turtle->pen-fill_color }"/>|.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD text.
+  method text.
     svg_text = |<text x="{ params-x }" y="{ params-y }">{ params-text }</text>|.
-  ENDMETHOD.
+  endmethod.
 
-ENDCLASS.
+endclass.

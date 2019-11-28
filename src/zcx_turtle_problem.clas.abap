@@ -1,33 +1,32 @@
-CLASS zcx_turtle_problem DEFINITION
-  PUBLIC FINAL
-  CREATE PRIVATE
-  INHERITING FROM cx_no_check.
+class zcx_turtle_problem definition
+  public final
+  create private
+  inheriting from cx_no_check.
 
-  PUBLIC SECTION.
-    CLASS-METHODS: raise
-      IMPORTING text TYPE string.
-    METHODS constructor
-      IMPORTING
-        text     TYPE string
-        previous TYPE REF TO cx_root OPTIONAL.
+  public section.
+    class-methods: raise
+      importing text type string.
+    methods constructor
+      importing
+        text     type string
+        previous type ref to cx_root optional.
 
-  PRIVATE SECTION.
-    DATA: text TYPE string.
+  private section.
+    data: text type string.
 
-ENDCLASS.
+endclass.
 
 
+class zcx_turtle_problem implementation.
 
-CLASS zcx_turtle_problem IMPLEMENTATION.
-
-  METHOD constructor ##ADT_SUPPRESS_GENERATION.
+  method constructor ##ADT_SUPPRESS_GENERATION.
     super->constructor( ).
     me->text = text.
     me->previous = previous.
-  ENDMETHOD.
+  endmethod.
 
-  METHOD raise.
-    RAISE EXCEPTION NEW zcx_turtle_problem( text = text ).
-  ENDMETHOD.
+  method raise.
+    raise exception new zcx_turtle_problem( text = text ).
+  endmethod.
 
-ENDCLASS.
+endclass.

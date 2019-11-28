@@ -1,64 +1,64 @@
-CLASS zcl_turtle_examples DEFINITION
-  PUBLIC FINAL.
+class zcl_turtle_examples definition
+  public final.
 
-  PUBLIC SECTION.
-    CLASS-METHODS polygon_flower
-      IMPORTING polygons      TYPE i
-                polygon_sides TYPE i
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+  public section.
+    class-methods polygon_flower
+      importing polygons      type i
+                polygon_sides type i
+      returning value(turtle) type ref to zcl_turtle.
 
-    CLASS-METHODS filled_square
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+    class-methods filled_square
+      returning value(turtle) type ref to zcl_turtle.
 
-    CLASS-METHODS polygon_using_lines
-      IMPORTING num_sides     TYPE i
-                side_length   TYPE i
-      RETURNING VALUE(turtle) TYPE REF TO zcl_turtle.
+    class-methods polygon_using_lines
+      importing num_sides     type i
+                side_length   type i
+      returning value(turtle) type ref to zcl_turtle.
 
-ENDCLASS.
+endclass.
 
-CLASS zcl_turtle_examples IMPLEMENTATION.
+class zcl_turtle_examples implementation.
 
-  METHOD polygon_flower.
+  method polygon_flower.
     turtle = zcl_turtle=>new( height = 800 width = 800 title = |Polygons:{ polygons } Sides: { polygon_sides }| ).
 
     turtle->goto( x = 200 y = 200 ).
-    turtle->set_pen( VALUE #(
+    turtle->set_pen( value #(
             stroke_color = `#FF00FF`
             stroke_width = 2 ) ).
 
-    DATA(current_polygon) = 0.
-    WHILE current_polygon < polygons.
+    data(current_polygon) = 0.
+    while current_polygon < polygons.
 
       " draw a regular polygon
-      DATA(current_polygon_side) = 0.
-      DATA(side_length) = 50.
-      WHILE current_polygon_side < polygon_sides.
+      data(current_polygon_side) = 0.
+      data(side_length) = 50.
+      while current_polygon_side < polygon_sides.
         turtle->forward( side_length ).
         turtle->right( 360 / polygon_sides ).
         current_polygon_side = current_polygon_side + 1.
-      ENDWHILE.
+      endwhile.
 
       " rotate before painting next polygon
       turtle->right( 360 / polygons ).
 
       current_polygon = current_polygon + 1.
-    ENDWHILE.
-  ENDMETHOD.
+    endwhile.
+  endmethod.
 
-  METHOD filled_square.
+  method filled_square.
     turtle = zcl_turtle=>new( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
-    turtle->set_pen( VALUE #(
+    turtle->set_pen( value #(
             fill_color = `#FF0000`
             stroke_color = `#FF00FF`
             stroke_width = 2 ) ).
 
-    DATA(start) = VALUE zcl_turtle=>t_point( x = 100 y = 100 ).
-    DATA(side_length) = 100.
+    data(start) = value zcl_turtle=>t_point( x = 100 y = 100 ).
+    data(side_length) = 100.
 
-    DATA(points) = VALUE zcl_turtle=>t_points(
+    data(points) = value zcl_turtle=>t_points(
       ( start )
       ( x = start-x + side_length y = start-y )
       ( x = start-x + side_length y = start-y + side_length )
@@ -66,26 +66,26 @@ CLASS zcl_turtle_examples IMPLEMENTATION.
     ).
 
     turtle->append_svg(
-      turtle->svg_builder->polyline( VALUE #( points = points ) )
+      turtle->svg_builder->polyline( value #( points = points ) )
     ).
-  ENDMETHOD.
+  endmethod.
 
-  METHOD polygon_using_lines.
+  method polygon_using_lines.
 
     turtle = zcl_turtle=>new( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
-    turtle->set_pen( VALUE #(
+    turtle->set_pen( value #(
             stroke_color = `#FF00FF`
             stroke_width = 2 ) ).
 
-    DATA(i) = 0.
-    WHILE i < num_sides.
+    data(i) = 0.
+    while i < num_sides.
       turtle->forward( side_length ).
       turtle->right( 360 / num_sides ).
 
       i = i + 1.
-    ENDWHILE.
-  ENDMETHOD.
+    endwhile.
+  endmethod.
 
-ENDCLASS.
+endclass.
