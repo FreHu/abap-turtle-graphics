@@ -4,8 +4,9 @@
   <asx:values>
    <DEVC>
     <CTEXT>Turtle graphics in ABAP</CTEXT>
-    <INTFPREFX>109-00</INTFPREFX>
+    <TPCLASS>X</TPCLASS>
     <PACKTYPE>H</PACKTYPE>
+    <PACKKIND>5</PACKKIND>
    </DEVC>
   </asx:values>
  </asx:abap>
