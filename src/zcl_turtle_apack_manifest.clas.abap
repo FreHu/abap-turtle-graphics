@@ -12,7 +12,6 @@ class zcl_turtle_apack_manifest definition
 endclass.
 
 
-
 class zcl_turtle_apack_manifest implementation.
 
   method constructor.
