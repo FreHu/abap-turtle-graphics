@@ -5,7 +5,7 @@
    <VSEOCLASS>
     <CLSNAME>ZCL_TURTLE_SVG</CLSNAME>
     <LANGU>E</LANGU>
-    <DESCRIPT>Svg generation utilities</DESCRIPT>
+    <DESCRIPT>Svg generation methods</DESCRIPT>
     <STATE>1</STATE>
     <CLSCCINCL>X</CLSCCINCL>
     <FIXPT>X</FIXPT>

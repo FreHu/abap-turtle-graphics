@@ -32,7 +32,7 @@ class zcl_turtle_lsystem definition
 
     types:
       begin of lsystem_instruction,
-        symbol type c length 1,
+        symbol type c1,
         kind   type lsystem_instruction_kind,
         "! Distance or angle (if the operation requires it)
         amount type i,

@@ -99,6 +99,8 @@ class zcl_turtle definition
     methods download
       importing filename type string default `abap-turtle.html`.
 
+
+
     methods enable_random_colors.
     methods disable_random_colors.
 
