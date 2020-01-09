@@ -99,8 +99,6 @@ class zcl_turtle definition
     methods download
       importing filename type string default `abap-turtle.html`.
 
-
-
     methods enable_random_colors.
     methods disable_random_colors.
 
@@ -289,7 +287,7 @@ class zcl_turtle implementation.
         path = path
         fullpath = full_path
       exceptions
-        OTHERS = 1 ).
+        others = 1 ).
 
     if sy-subrc <> 0.
       message id sy-msgid type sy-msgty number sy-msgno
@@ -302,7 +300,7 @@ class zcl_turtle implementation.
         filename = file_name
       changing
         data_tab = lines
-      exceptions OTHERS = 1 ).
+      exceptions others = 1 ).
 
     if sy-subrc <> 0.
       message id sy-msgid type sy-msgty number sy-msgno
