@@ -25,11 +25,9 @@
             "execSQL": true,
             "kernelCall": true,
             "communication": true,
-            "statics": true,
-            "break": true,
-            "defaultKey": true,
-            "systemCall": true
+            "statics": true
         },
+        "breakpoint": true,
         "commented_code": true,
         "constructor_visibility_public": {
             "reason": "https://github.com/SAP/styleguides/blob/master/clean-abap/CleanABAP.md#if-your-global-class-is-create-private-leave-the-constructor-public"
