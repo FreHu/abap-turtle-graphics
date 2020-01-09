@@ -300,7 +300,7 @@ class zcl_turtle implementation.
         filename = file_name
       changing
         data_tab = lines
-      exceptions OTHERS = 1 ).
+      exceptions others = 1 ).
 
     if sy-subrc <> 0.
       message id sy-msgid type sy-msgty number sy-msgno
