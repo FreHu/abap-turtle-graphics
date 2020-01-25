@@ -1,5 +1,7 @@
 ![logo](./turtle.png)
 
+![abap package version](https://img.shields.io/endpoint?url=https://shield.abap.space/version-shield-json/github/FreHu/abap-turtle-graphics/.apack-manifest.xml)
+
 [Announcement blog](https://blogs.sap.com/2019/10/12/abapturtle-make-something-pretty-in-abap-and-possibly-win-prizes/)
 
 Enterprise-grade turtle graphics library for abap intended for business-oriented children or bored adults. 
