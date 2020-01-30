@@ -17,7 +17,7 @@ class zcl_turtle_lsystem definition
         "! Doesn't do anything. Can be used for helper symbols.
         noop       type lsystem_instruction_kind value `noop`,
         "! Go forward by 'amount' pixels
-        forward    type lsystem_instruction_kind value `forwrad`,
+        forward    type lsystem_instruction_kind value `forward`,
         "! Go back by 'amount' pixels
         back       type lsystem_instruction_kind value `back`,
         "! Turn left by 'amount' degrees
