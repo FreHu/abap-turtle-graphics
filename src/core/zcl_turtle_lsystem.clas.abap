@@ -9,7 +9,7 @@ class zcl_turtle_lsystem definition
         "! New string
         to   type string,
       end of lsystem_rewrite_rule,
-      lsystem_rewrite_rules type standard table of lsystem_rewrite_rule with default key.
+      lsystem_rewrite_rules type standard table of lsystem_rewrite_rule with empty key.
 
     types: lsystem_instruction_kind type string.
     constants:

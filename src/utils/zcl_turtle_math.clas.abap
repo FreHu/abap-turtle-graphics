@@ -4,7 +4,7 @@ class zcl_turtle_math definition
   create public .
 
   public section.
-    types: numbers_i type standard table of i with default key.
+    types: numbers_i type standard table of i with key table_line.
 
     class-methods: find_max_int
       importing numbers       type numbers_i

@@ -24,7 +24,7 @@ class zcl_turtle definition
         x type i,
         y type i,
       end of t_point,
-      t_points type standard table of t_point with default key.
+      t_points type standard table of t_point with key table_line.
 
     types:
       begin of turtle_position,
