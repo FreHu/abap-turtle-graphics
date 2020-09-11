@@ -17,6 +17,7 @@
             "folder": "/deps",
             "files": "/src/**/*.*"
         }
+        
     ],
     "rules": {
         "avoid_use": {
