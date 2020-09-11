@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "deps": "rm -r deps && git clone https://github.com/FreHu/deps deps",
+    "lint": "npm run deps && abaplint"
+  }
+}
