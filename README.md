@@ -53,6 +53,8 @@ movement:
 
 styling:
 
+- style (css will be placed in the html document head in within <style></style> tags)
+
 - background color
 - stroke width
 - stroke color
