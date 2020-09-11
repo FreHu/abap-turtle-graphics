@@ -40,6 +40,7 @@ class zcl_turtle definition
                 width            type i default defaults-width
                 background_color type zcl_turtle_colors=>rgb_hex_color optional
                 title            type string default defaults-title
+                style            type string optional
       returning value(turtle)    type ref to zcl_turtle.
 
     "! Creates a new turtle based on an existing instance. The position, angle and pen are preserved.
@@ -57,7 +58,8 @@ class zcl_turtle definition
       importing height           type i
                 width            type i
                 background_color type zcl_turtle_colors=>rgb_hex_color optional
-                title            type string.
+                title            type string
+                style            type string optional.
 
     methods right
       importing degrees       type f
@@ -112,7 +114,8 @@ class zcl_turtle definition
       set_color_scheme importing color_scheme type zcl_turtle_colors=>rgb_hex_colors,
       set_width importing width type i,
       set_height importing height type i,
-      set_svg importing svg type string.
+      set_svg importing svg type string,
+      set_style importing style type string.
 
     data: title        type string read-only,
           svg          type string read-only,
@@ -125,6 +128,7 @@ class zcl_turtle definition
 
   private section.
     data use_random_colors type abap_bool.
+    data style type string.
 
     methods get_html
       returning value(html) type string.
@@ -228,6 +232,7 @@ class zcl_turtle implementation.
     me->width = width.
     me->height = height.
     me->title = title.
+    me->style = style.
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
     me->use_random_colors = abap_true.
     me->svg_builder = zcl_turtle_svg=>new( me ).
@@ -310,7 +315,10 @@ class zcl_turtle implementation.
   endmethod.
 
   method get_html.
-    html = |<html><body><h1>{ title }</h1><svg width="{ width }" height="{ height }">{ svg }</svg></body></html>|.
+    html = zcl_turtle_html_parts=>html_document(
+      title = me->title
+      style = me->style
+      svg = |<svg width="{ me->width }" height="{ me->height }">{ me->svg }</svg>| ).
   endmethod.
 
   method disable_random_colors.
@@ -336,6 +344,7 @@ class zcl_turtle implementation.
       width = existing_turtle->width
       height = existing_turtle->height
       title = existing_turtle->title
+      style = existing_turtle->style
     ).
 
     turtle->set_pen( existing_turtle->pen ).
@@ -386,6 +395,10 @@ class zcl_turtle implementation.
 
   method set_svg.
     me->svg = svg.
+  endmethod.
+
+  method set_style.
+    me->style = style.
   endmethod.
 
 endclass.
