@@ -7,14 +7,13 @@
     },
     "syntax": {
         "version": "v753",
-        "errorNamespace": "",
+        "errorNamespace": "^(Z|Y)",
         "globalConstants": [],
         "globalMacros": []
     },
     "dependencies": [
         {
             "url": "https://github.com/FreHu/deps",
-            "folder": "/deps",
             "files": "/src/**/*.*"
         }
         
@@ -29,7 +28,8 @@
             "statics": true,
             "break": true,
             "defaultKey": true,
-            "systemCall": true
+            "systemCall": true,
+            "describeLines": true
         },
         "commented_code": true,
         "constructor_visibility_public": true,
@@ -80,7 +80,9 @@
             "occurs": true,
             "fieldSymbolStructure": true,
             "setExtended": true,
-            "withHeaderLine": true
+            "withHeaderLine": true,
+            "load": true,
+            "typePools": true
         },
         "parser_error": true,
         "preferred_compare_operator": {
