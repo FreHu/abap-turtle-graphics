@@ -16,19 +16,14 @@
             "url": "https://github.com/FreHu/deps",
             "files": "/src/**/*.*"
         }
-        
+
     ],
     "rules": {
         "avoid_use": {
             "define": true,
-            "endselect": true,
-            "execSQL": true,
-            "kernelCall": true,
-            "communication": true,
             "statics": true,
             "break": true,
             "defaultKey": true,
-            "systemCall": true,
             "describeLines": true
         },
         "commented_code": true,
@@ -64,6 +59,17 @@
             "statements": 30
         },
         "mix_returning": true,
+        "7bit_ascii": true,
+        "check_abstract": true,
+        "chain_mainly_declarations": true,
+        "check_text_elements": true,
+        "check_subrc": true,
+        "check_no_handler_pragma": true,
+        "contains_tab": true,
+        "double_space": true,
+        "dangerous_statement": true,
+        "unknown_types": true,
+        "modify_only_own_db_tables": true,
         "msag_consistency": true,
         "nesting": {
             "depth": 5
@@ -71,6 +77,13 @@
         "obsolete_statement": {
             "refresh": true,
             "compute": true,
+            "communication": true,
+            "exitFromSQL": true,
+            "freeMemory": true,
+            "pack": true,
+            "parameter": true,
+            "ranges": true,
+            "selectWithoutInto": true,
             "add": true,
             "subtract": true,
             "multiply": true,
