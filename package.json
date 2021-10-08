@@ -1,5 +1,15 @@
 {
+  "license": "The Unlicense",
   "scripts": {
-    "lint": "abaplint"
+    "lint": "abaplint",
+    "unit": "rm -rf output && abap_transpile test/abap_transpile.json && echo RUNNING && node output/index.mjs"
+  },
+  "devDependencies": {
+    "@abaplint/cli": "^2.79.9",
+    "@abaplint/transpiler-cli": "^1.6.33",
+    "@abaplint/runtime": "^1.6.33"
+  },
+  "dependencies": {
+    "transpiler-top-level": "github:abaplint/transpiler"
   }
 }

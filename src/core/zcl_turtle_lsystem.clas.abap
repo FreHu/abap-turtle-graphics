@@ -78,18 +78,41 @@ endclass.
 class zcl_turtle_lsystem implementation.
 
   method new.
-    result = new #( ).
+    data temp1 type ref to undefined.
+    create object temp1.
+    result = temp1.
     result->turtle = turtle.
     result->parameters = parameters.
   endmethod.
 
   method execute.
-    data(final_value) = get_final_value( ).
+    final_valueTYPE string.
+    final_valueTYPE string.
+    final_valueTYPE string.
+    final_valueTYPE string.
+    final_valueTYPE string.
+    data final_value type string.
+    final_value = get_final_value( ).
 
-    data(index) = 0.
+    indexTYPE i.
+    indexTYPE i.
+    indexTYPE i.
+    indexTYPE i.
+    indexTYPE i.
+    data index type i.
+    index = 0.
     while index < strlen( final_value ).
-      data(symbol) = final_value+index(1).
-      data(rule) = value #( parameters-instructions[ symbol = symbol ] optional ).
+      symbolTYPE string.
+      symbolTYPE string.
+      symbolTYPE string.
+      symbolTYPE string.
+      symbolTYPE string.
+      data symbol type string.
+      symbol = final_value+index(1).
+      ruleTYPE zcl_turtle_lsystem=>lsystem_instruction.
+      data rule type zcl_turtle_lsystem=>lsystem_instruction.
+      data temp1 type zcl_turtle_lsystem=>lsystem_instruction.
+      rule = temp1.
       case rule-kind.
         when instruction_kind-noop.
           continue.
@@ -98,13 +121,21 @@ class zcl_turtle_lsystem implementation.
         when instruction_kind-back.
           turtle->back( rule-amount ).
         when instruction_kind-left.
-          turtle->right( conv f( rule-amount ) ).
+          data temp2 type f.
+          temp2 = rule-amount.
+          turtle->right( temp2 ).
         when instruction_kind-right.
-          turtle->left( conv f( rule-amount ) ).
+          data temp3 type f.
+          temp3 = rule-amount.
+          turtle->left( temp3 ).
         when instruction_kind-stack_push.
           push_stack( turtle->position ).
         when instruction_kind-stack_pop.
-          data(position) = pop_stack( ).
+          positionTYPE zcl_turtle=>turtle_position.
+          positionTYPE zcl_turtle=>turtle_position.
+          positionTYPE zcl_turtle=>turtle_position.
+          data position type zcl_turtle=>turtle_position.
+          position = pop_stack( ).
           turtle->goto( x = position-x y = position-y ).
           turtle->set_angle( position-angle ).
         when others.
@@ -121,9 +152,21 @@ class zcl_turtle_lsystem implementation.
   endmethod.
 
   method get_final_value.
-    data(instructions) = parameters-initial_state.
+    instructions = parameters-initial_state.
+    e.
+    instructions = parameters-initial_state.
+    e.
+    instructions = parameters-initial_state.
+    e.
+    instructions = parameters-initial_state.
+    e.
+    instructions = parameters-initial_state.
+    e.
+    data instructions like parameters-initial_state.
+    instructions = parameters-initial_state.
     do parameters-num_iterations times.
-      loop at parameters-rewrite_rules assigning field-symbol(<rule>).
+      field-symbols <rule> like line of parameters-rewrite_rules.
+      loop at parameters-rewrite_rules assigning <rule>.
         replace all occurrences of <rule>-from in instructions
           with <rule>-to.
       endloop.
@@ -133,7 +176,12 @@ class zcl_turtle_lsystem implementation.
   endmethod.
 
   method pop_stack.
-    position = position_stack[ lines( position_stack ) ].
+    data temp4 like line of position_stack.
+    read table position_stack index lines( position_stack ) into temp4.
+    if sy-subrc <> 0.
+      raise exception type cx_sy_itab_line_not_found.
+    endif.
+    position = temp4.
     delete position_stack index lines( position_stack ).
   endmethod.
 

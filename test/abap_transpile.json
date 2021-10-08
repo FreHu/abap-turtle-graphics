@@ -1,0 +1,23 @@
+{
+  "input_folder": "{test,src}",
+  "input_filter": [
+    "zcl_turtle*",
+    "zcl_number_range"
+  ],
+  "output_folder": "output",
+  "lib": "https://github.com/open-abap/open-abap",
+  "write_unit_tests": true,
+  "write_source_map": true,
+  "options": {
+    "ignoreSyntaxCheck": false,
+    "addFilenames": true,
+    "addCommonJS": true,
+    "unknownTypes": "",
+    "skip": [
+      {
+        "object": "zcl_turtle_apack_manifest",
+        "class": "zcl_turtle_apack_manifest"
+      }
+    ]
+  }
+}

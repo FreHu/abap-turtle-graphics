@@ -144,20 +144,35 @@ endclass.
 class zcl_turtle implementation.
 
   method new.
-    turtle = new zcl_turtle( width = width height = height background_color = background_color title = title ).
+    data temp1 type ref to zcl_turtle.
+    create object temp1 type zcl_turtle exporting width = width height = height background_color = background_color title = title.
+    turtle = temp1.
   endmethod.
 
 
   method forward.
 
-    data(old_position) = position.
-    data(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
-    data(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
+    old_position = position.
+    n.
+    old_position = position.
+    n.
+    old_position = position.
+    n.
+    data old_position like position.
+    old_position = position.
+    new_xTYPE f.
+    data new_x type f.
+    new_x = how_far * cos( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
+    new_yTYPE f.
+    data new_y type f.
+    new_y = how_far * sin( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
 
-    data(new_position) = value turtle_position(
-      x = old_position-x + new_x
-      y = old_position-y + new_y
-      angle = old_position-angle ).
+    data temp2 type turtle_position.
+    temp2-x = old_position-x + new_x.
+    temp2-y = old_position-y + new_y.
+    temp2-angle = old_position-angle.
+    data new_position like temp2.
+    new_position = temp2.
 
     if pen-is_up = abap_false.
       me->line(
@@ -238,26 +253,42 @@ class zcl_turtle implementation.
     me->svg_builder = zcl_turtle_svg=>new( me ).
 
     if background_color is not initial.
-      me->set_pen( value #( fill_color = background_color ) ).
-      data(side_length) = 100.
+      data temp3 type zcl_turtle=>t_pen.
+      temp3-fill_color = background_color.
+      me->set_pen( temp3 ).
+      side_lengthTYPE i.
+      data side_length type i.
+      side_length = 100.
 
-      data(points) = value t_points(
-        ( x = 0 y = 0 )
-        ( x = 0 + width y = 0 )
-        ( x = 0 + width y = 0 + height )
-        ( x = 0   y = 0 + height )
-      ).
+      data temp4 type t_points.
+      data temp5 like line of temp4.
+      temp5-x = 0.
+      temp5-y = 0.
+      append temp5 to temp4.
+      temp5-x = 0 + width.
+      temp5-y = 0.
+      append temp5 to temp4.
+      temp5-x = 0 + width.
+      temp5-y = 0 + height.
+      append temp5 to temp4.
+      temp5-x = 0.
+      temp5-y = 0 + height.
+      append temp5 to temp4.
+      points = temp4.
+      4.
+      data points like temp4.
+      points = temp4.
 
       me->append_svg(
         me->svg_builder->polyline( value #( points = points ) )
       ).
     endif.
 
-    me->pen = value #(
-     stroke_width = 1
-     stroke_color = `#FF0000`
-     is_up = abap_false
-   ).
+    data temp6 type zcl_turtle=>t_pen.
+    temp6-stroke_width = 1.
+    temp6-stroke_color = `#FF0000`.
+    temp6-is_up = abap_false.
+    me->pen = temp6.
   endmethod.
 
   method get_position.
@@ -278,9 +309,14 @@ class zcl_turtle implementation.
 
   method download.
 
-    data(file_name) = filename.
-    data(path) = ``.
-    data(full_path) = ``.
+    data file_name like filename.
+    file_name = filename.
+    pathTYPE string.
+    data path type string.
+    path = ``.
+    full_pathTYPE string.
+    data full_path type string.
+    full_path = ``.
 
     cl_gui_frontend_services=>file_save_dialog(
       exporting
@@ -299,7 +335,8 @@ class zcl_turtle implementation.
               with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
     endif.
 
-    split me->get_html( ) at |\r\n| into table data(lines).
+    data lines type standard table of string with default key.
+    split me->get_html( ) at |\r\n| into table lines.
     cl_gui_frontend_services=>gui_download(
       exporting
         filename = file_name
@@ -340,12 +377,9 @@ class zcl_turtle implementation.
   endmethod.
 
   method from_existing.
-    turtle = new #(
-      width = existing_turtle->width
-      height = existing_turtle->height
-      title = existing_turtle->title
-      style = existing_turtle->style
-    ).
+    data temp7 type ref to undefined.
+    create object temp7 exporting width = existing_turtle->width height = existing_turtle->height title = existing_turtle->title style = existing_turtle->style.
+    turtle = temp7.
 
     turtle->set_pen( existing_turtle->pen ).
     turtle->set_color_scheme( existing_turtle->color_scheme ).
@@ -364,21 +398,38 @@ class zcl_turtle implementation.
     endif.
 
     " start where the last one left off
-    turtle = zcl_turtle=>from_existing( turtles[ lines( turtles ) ] ).
+    data temp8 like line of turtles.
+    read table turtles index lines( turtles ) into temp8.
+    if sy-subrc <> 0.
+      raise exception type cx_sy_itab_line_not_found.
+    endif.
+    turtle = zcl_turtle=>from_existing( temp8 ).
 
     " new image size is the largest of composed turtles
-    data(new_width) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->width ) ) ).
+    data temp9 type zcl_turtle_math=>numbers_i.
+    append <x>->width to temp9.
+    data new_width type i.
+    new_width = zcl_turtle_math=>find_max_int(
+      temp9 ).
 
-    data(new_height) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->height ) ) ).
+    data temp11 type zcl_turtle_math=>numbers_i.
+    append <x>->height to temp11.
+    new_heightTYPE i.
+    data new_height type i.
+    new_height = zcl_turtle_math=>find_max_int(
+      temp11 ).
 
     turtle->set_height( new_height ).
     turtle->set_width( new_width ).
 
-    data(composed_svg) = reduce string(
+    data temp13 type stringtab.
+    append <x>->svg to temp13.
+    composed_svgTYPE string.
+    composed_svgTYPE string.
+    data composed_svg type string.
+    composed_svg = reduce string(
       init result = ``
-        for <svg> in value stringtab( for <x> in turtles ( <x>->svg ) )
+        for <svg> in temp13
       next result = result && <svg> ).
 
     turtle->append_svg( composed_svg ).

@@ -6,7 +6,7 @@
         "skipGeneratedFunctionGroups": true
     },
     "syntax": {
-        "version": "v753",
+        "version": "v702",
         "errorNamespace": "^(Z|Y)",
         "globalConstants": [],
         "globalMacros": []
@@ -16,19 +16,14 @@
             "url": "https://github.com/FreHu/deps",
             "files": "/src/**/*.*"
         }
-        
     ],
     "rules": {
+        "downport": true,
         "avoid_use": {
             "define": true,
-            "endselect": true,
-            "execSQL": true,
-            "kernelCall": true,
-            "communication": true,
             "statics": true,
             "break": true,
             "defaultKey": true,
-            "systemCall": true,
             "describeLines": true
         },
         "commented_code": true,
@@ -61,6 +56,7 @@
         "method_length": {
             "errorWhenEmpty": true,
             "ignoreTestClasses": false,
+            "checkForms": true,
             "statements": 30
         },
         "mix_returning": true,
@@ -82,7 +78,17 @@
             "setExtended": true,
             "withHeaderLine": true,
             "load": true,
-            "typePools": true
+            "typePools": true,
+            "callTransformation": true,
+            "communication": true,
+            "exitFromSQL": true,
+            "sortByFS": true,
+            "selectWithoutInto": true,
+            "freeMemory": true,
+            "pack": true,
+            "parameter": true,
+            "ranges": true,
+            "regex": false
         },
         "parser_error": true,
         "preferred_compare_operator": {
@@ -118,7 +124,8 @@
             "ignoreExceptions": false,
             "globalClassSkipFirst": false,
             "ignoreGlobalClassDefinition": false,
-            "ignoreGlobalInterface": false
+            "ignoreGlobalInterface": false,
+            "selectionScreenBlockIndentation": true
         },
         "sequential_blank": {
             "lines": 4
