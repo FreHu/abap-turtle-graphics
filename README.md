@@ -97,15 +97,15 @@ DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
 turtle->goto( x = 200 y = 200 ).
 
 DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
-  initial_state = `F`
   instructions = VALUE #(
     ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
     ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
     ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 ) )
   num_iterations = 3
+  initial_state = `F`
   rewrite_rules = VALUE #(
     ( from = `F` to = `F+F-F-F+F` )
-    )
+  )
 ).
 
 DATA(lsystem) = zcl_turtle_lsystem=>new(
@@ -125,7 +125,6 @@ turtle->goto( x = 300 y = 600 ).
 turtle->set_angle( -90 ).
 
 DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
-  initial_state = `F`
   instructions = VALUE #(
     ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
     ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = 25 )
@@ -134,9 +133,10 @@ DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
     ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
   )
   num_iterations = 5
+  initial_state = `F`
   rewrite_rules = VALUE #(
     ( from = `F` to = `F[+F]F[-F][F]` )
-    )
+  )
 ).
 
 DATA(lsystem) = zcl_turtle_lsystem=>new(
