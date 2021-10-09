@@ -117,7 +117,7 @@ class zcl_turtle_lsystem implementation.
   endmethod.
 
   method show.
-    turtle->show( ).
+    zcl_turtle_output=>show( turtle ).
   endmethod.
 
   method get_final_value.
