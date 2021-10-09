@@ -111,7 +111,7 @@ class zcl_turtle definition
       set_svg importing svg type string,
       set_style importing style type string,
       get_html
-            returning value(html) type string.
+        returning value(html) type string.
 
     data: title        type string read-only,
           svg          type string read-only,
@@ -158,8 +158,8 @@ class zcl_turtle implementation.
       me->line(
         x_from = old_position-x
         y_from = old_position-y
-        x_to = new_position-x
-        y_to = new_position-y ).
+        x_to   = new_position-x
+        y_to   = new_position-y ).
     endif.
 
     me->set_position( new_position ).
@@ -267,7 +267,7 @@ class zcl_turtle implementation.
     html = zcl_turtle_html_parts=>html_document(
       title = me->title
       style = me->style
-      svg = |<svg width="{ me->width }" height="{ me->height }">{ me->svg }</svg>| ).
+      svg   = |<svg width="{ me->width }" height="{ me->height }">{ me->svg }</svg>| ).
   endmethod.
 
   method disable_random_colors.
@@ -308,6 +308,8 @@ class zcl_turtle implementation.
 
   method compose.
 
+    types: tt_strings type standard table of string with empty key.
+
     if lines( turtles ) < 1.
       zcx_turtle_problem=>raise( `Not enough turtles to compose anything.` ).
     endif.
@@ -327,7 +329,7 @@ class zcl_turtle implementation.
 
     data(composed_svg) = reduce string(
       init result = ``
-        for <svg> in value stringtab( for <x> in turtles ( <x>->svg ) )
+        for <svg> in value tt_strings( for <x> in turtles ( <x>->svg ) )
       next result = result && <svg> ).
 
     turtle->append_svg( composed_svg ).
