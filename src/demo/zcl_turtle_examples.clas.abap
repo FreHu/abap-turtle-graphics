@@ -47,45 +47,44 @@ class zcl_turtle_examples implementation.
   endmethod.
 
   method filled_square.
-    turtle = zcl_turtle=>create( height = 800 width = 800 ).
-    turtle->goto( x = 200 y = 200 ).
+    " turtle = zcl_turtle=>create( height = 800 width = 800 ).
+    " turtle->goto( x = 200 y = 200 ).
 
-    turtle->set_pen( value #(
-            fill_color = `#FF0000`
-            stroke_color = `#FF00FF`
-            stroke_width = 2 ) ).
+    " turtle->set_pen( value #(
+    "         fill_color = `#FF0000`
+    "         stroke_color = `#FF00FF`
+    "         stroke_width = 2 ) ).
 
-    data(start) = value zcl_turtle=>t_point( x = 100 y = 100 ).
-    data(side_length) = 100.
+    " data(start) = value zcl_turtle=>t_point( x = 100 y = 100 ).
+    " data(side_length) = 100.
 
-    data(points) = value zcl_turtle=>t_points(
-      ( start )
-      ( x = start-x + side_length y = start-y )
-      ( x = start-x + side_length y = start-y + side_length )
-      ( x = start-x y = start-y + side_length )
-    ).
+    " data(points) = value zcl_turtle=>t_points(
+    "   ( start )
+    "   ( x = start-x + side_length y = start-y )
+    "   ( x = start-x + side_length y = start-y + side_length )
+    "   ( x = start-x y = start-y + side_length )
+    " ).
 
-    turtle->append_svg(
-      turtle->svg_builder->polyline( value #( points = points ) )
-    ).
+    " turtle->append_svg(
+    "   turtle->svg_builder->polyline( value #( points = points ) )
+    " ).
   endmethod.
 
   method polygon_using_lines.
+    " turtle = zcl_turtle=>create( height = 800 width = 800 ).
+    " turtle->goto( x = 200 y = 200 ).
 
-    turtle = zcl_turtle=>create( height = 800 width = 800 ).
-    turtle->goto( x = 200 y = 200 ).
+    " turtle->set_pen( value #(
+    "         stroke_color = `#FF00FF`
+    "         stroke_width = 2 ) ).
 
-    turtle->set_pen( value #(
-            stroke_color = `#FF00FF`
-            stroke_width = 2 ) ).
+    " data(i) = 0.
+    " while i < num_sides.
+    "   turtle->forward( side_length ).
+    "   turtle->right( 360 / num_sides ).
 
-    data(i) = 0.
-    while i < num_sides.
-      turtle->forward( side_length ).
-      turtle->right( 360 / num_sides ).
-
-      i = i + 1.
-    endwhile.
+    "   i = i + 1.
+    " endwhile.
   endmethod.
 
 endclass.
