@@ -23,25 +23,16 @@ class zcl_turtle_examples implementation.
     turtle = zcl_turtle=>new( height = 800 width = 800 title = |Polygons:{ polygons } Sides: { polygon_sides }| ).
 
     turtle->goto( x = 200 y = 200 ).
-    data temp1 type zcl_turtle=>t_pen.
-    temp1-stroke_color = `#FF00FF`.
-    temp1-stroke_width = 2.
-    turtle->set_pen( temp1 ).
+    turtle->set_pen( value #(
+            stroke_color = `#FF00FF`
+            stroke_width = 2 ) ).
 
-    current_polygonTYPE i.
-    current_polygonTYPE i.
-    current_polygonTYPE i.
-    current_polygonTYPE i.
-    data current_polygon type i.
-    current_polygon = 0.
+    data(current_polygon) = 0.
     while current_polygon < polygons.
 
       " draw a regular polygon
-      current_polygon_sideTYPE i.
-      data current_polygon_side type i.
-      current_polygon_side = 0.
-      data side_length type i.
-      side_length = 50.
+      data(current_polygon_side) = 0.
+      data(side_length) = 50.
       while current_polygon_side < polygon_sides.
         turtle->forward( side_length ).
         turtle->right( 360 / polygon_sides ).
@@ -59,43 +50,20 @@ class zcl_turtle_examples implementation.
     turtle = zcl_turtle=>new( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
-    data temp2 type zcl_turtle=>t_pen.
-    temp2-fill_color = `#FF0000`.
-    temp2-stroke_color = `#FF00FF`.
-    temp2-stroke_width = 2.
-    turtle->set_pen( temp2 ).
+    turtle->set_pen( value #(
+            fill_color = `#FF0000`
+            stroke_color = `#FF00FF`
+            stroke_width = 2 ) ).
 
-    data temp3 type zcl_turtle=>t_point.
-    temp3-x = 100.
-    temp3-y = 100.
-    start = temp3.
-    3.
-    start = temp3.
-    3.
-    data start like temp3.
-    start = temp3.
-    side_lengthTYPE i.
-    side_lengthTYPE i.
-    side_lengthTYPE i.
-    data side_length type i.
-    side_length = 100.
+    data(start) = value zcl_turtle=>t_point( x = 100 y = 100 ).
+    data(side_length) = 100.
 
-    data temp4 type zcl_turtle=>t_points.
-    append start to temp4.
-    data temp6 like line of temp4.
-    temp6-x = start-x + side_length.
-    temp6-y = start-y.
-    append temp6 to temp4.
-    temp6-x = start-x + side_length.
-    temp6-y = start-y + side_length.
-    append temp6 to temp4.
-    temp6-x = start-x.
-    temp6-y = start-y + side_length.
-    append temp6 to temp4.
-    points = temp4.
-    4.
-    data points like temp4.
-    points = temp4.
+    data(points) = value zcl_turtle=>t_points(
+      ( start )
+      ( x = start-x + side_length y = start-y )
+      ( x = start-x + side_length y = start-y + side_length )
+      ( x = start-x y = start-y + side_length )
+    ).
 
     turtle->append_svg(
       turtle->svg_builder->polyline( value #( points = points ) )
@@ -107,16 +75,11 @@ class zcl_turtle_examples implementation.
     turtle = zcl_turtle=>new( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
-    data temp7 type zcl_turtle=>t_pen.
-    temp7-stroke_color = `#FF00FF`.
-    temp7-stroke_width = 2.
-    turtle->set_pen( temp7 ).
+    turtle->set_pen( value #(
+            stroke_color = `#FF00FF`
+            stroke_width = 2 ) ).
 
-    iTYPE i.
-    iTYPE i.
-    iTYPE i.
-    data i type i.
-    i = 0.
+    data(i) = 0.
     while i < num_sides.
       turtle->forward( side_length ).
       turtle->right( 360 / num_sides ).

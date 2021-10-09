@@ -18,8 +18,7 @@ class lcl_tests implementation.
 
   method initialization.
 
-    data turtle type ref to zcl_turtle.
-    turtle = zcl_turtle=>new( ).
+    data(turtle) = zcl_turtle=>new( ).
 
     cl_abap_unit_assert=>assert_equals( exp = zcl_turtle=>defaults-width act = turtle->width ).
     cl_abap_unit_assert=>assert_equals( exp = zcl_turtle=>defaults-height act = turtle->height ).
@@ -34,8 +33,7 @@ class lcl_tests implementation.
 
   method goto.
 
-    data turtle type ref to zcl_turtle.
-    turtle = zcl_turtle=>new( ).
+    data(turtle) = zcl_turtle=>new( ).
 
     turtle->goto( x = 100 y = 200 ).
     cl_abap_unit_assert=>assert_equals( exp = 100 act = turtle->position-x ).
@@ -45,8 +43,7 @@ class lcl_tests implementation.
 
   method pen_up_down.
 
-    data turtle type ref to zcl_turtle.
-    turtle = zcl_turtle=>new( ).
+    data(turtle) = zcl_turtle=>new( ).
 
     cl_abap_unit_assert=>assert_equals( exp = abap_false act = turtle->pen-is_up ).
 
@@ -60,8 +57,7 @@ class lcl_tests implementation.
 
   method forward.
 
-    data turtle type ref to zcl_turtle.
-    turtle = zcl_turtle=>new( ).
+    data(turtle) = zcl_turtle=>new( ).
 
     turtle->goto( x = 150 y = 0 ).
     turtle->forward( 100 ).
@@ -73,8 +69,7 @@ class lcl_tests implementation.
 
   method back.
 
-    data turtle type ref to zcl_turtle.
-    turtle = zcl_turtle=>new( ).
+    data(turtle) = zcl_turtle=>new( ).
 
     turtle->goto( x = 150 y = 0 ).
     turtle->back( 100 ).

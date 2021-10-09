@@ -16,8 +16,7 @@ endclass.
 class zcl_number_range implementation.
 
   method get.
-    data i like min.
-    i = min.
+    data(i) = min.
     while i < max.
       append i to result.
       i = i + 1.

@@ -26,9 +26,7 @@ class zcx_turtle_problem implementation.
   endmethod.
 
   method raise.
-    data temp1 type ref to zcx_turtle_problem.
-    create object temp1 type zcx_turtle_problem exporting text = text.
-    raise exception temp1.
+    raise exception new zcx_turtle_problem( text = text ).
   endmethod.
 
 endclass.
