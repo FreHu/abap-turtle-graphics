@@ -4,7 +4,10 @@
     "skipGeneratedGatewayClasses": true,
     "skipGeneratedPersistentClasses": true,
     "skipGeneratedFunctionGroups": true,
-    "useApackDependencies": false
+    "useApackDependencies": false,
+    "exclude": [
+      "/src/utils/zcl_turtle_output.clas.abap"
+    ]
   },
   "dependencies": [
     {
