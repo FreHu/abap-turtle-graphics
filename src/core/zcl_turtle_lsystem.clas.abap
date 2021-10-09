@@ -59,7 +59,7 @@ class zcl_turtle_lsystem definition
       returning value(result) type ref to zcl_turtle_lsystem.
 
     methods execute.
-    methods show.
+
 
   private section.
     methods get_final_value
@@ -114,10 +114,6 @@ class zcl_turtle_lsystem implementation.
       index = index + 1.
     endwhile.
 
-  endmethod.
-
-  method show.
-    zcl_turtle_output=>show( turtle ).
   endmethod.
 
   method get_final_value.
