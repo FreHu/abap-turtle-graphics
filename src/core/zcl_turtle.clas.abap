@@ -95,12 +95,6 @@ class zcl_turtle definition
     methods pen_down
       returning value(turtle) type ref to zcl_turtle.
 
-    methods show
-      returning value(turtle) type ref to zcl_turtle.
-
-    methods download
-      importing filename type string default `abap-turtle.html`.
-
     methods enable_random_colors.
     methods disable_random_colors.
 
@@ -115,7 +109,9 @@ class zcl_turtle definition
       set_width importing width type i,
       set_height importing height type i,
       set_svg importing svg type string,
-      set_style importing style type string.
+      set_style importing style type string,
+      get_html
+            returning value(html) type string.
 
     data: title        type string read-only,
           svg          type string read-only,
@@ -130,8 +126,7 @@ class zcl_turtle definition
     data use_random_colors type abap_bool.
     data style type string.
 
-    methods get_html
-      returning value(html) type string.
+
     methods line
       importing x_from        type i
                 y_from        type i
@@ -220,14 +215,6 @@ class zcl_turtle implementation.
     turtle = me.
   endmethod.
 
-  method show.
-    cl_abap_browser=>show_html(
-      size = cl_abap_browser=>xlarge
-      html_string = get_html( ) ).
-
-    turtle = me.
-  endmethod.
-
   method constructor.
     me->width = width.
     me->height = height.
@@ -274,44 +261,6 @@ class zcl_turtle implementation.
 
   method set_color_scheme.
     me->color_scheme = color_scheme.
-  endmethod.
-
-  method download.
-
-    data(file_name) = filename.
-    data(path) = ``.
-    data(full_path) = ``.
-
-    cl_gui_frontend_services=>file_save_dialog(
-      exporting
-        default_extension = `html`
-        default_file_name = filename
-        initial_directory = ``
-      changing
-        filename = file_name
-        path = path
-        fullpath = full_path
-      exceptions
-        others = 1 ).
-
-    if sy-subrc <> 0.
-      message id sy-msgid type sy-msgty number sy-msgno
-              with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
-    endif.
-
-    split me->get_html( ) at |\r\n| into table data(lines).
-    cl_gui_frontend_services=>gui_download(
-      exporting
-        filename = file_name
-      changing
-        data_tab = lines
-      exceptions others = 1 ).
-
-    if sy-subrc <> 0.
-      message id sy-msgid type sy-msgty number sy-msgno
-        with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
-    endif.
-
   endmethod.
 
   method get_html.
