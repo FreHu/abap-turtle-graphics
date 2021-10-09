@@ -5,7 +5,7 @@ class zcl_turtle_colors definition
 
   public section.
     types: rgb_hex_color  type string,
-           rgb_hex_colors type standard table of rgb_hex_color with empty key.
+           rgb_hex_colors type standard table of rgb_hex_color with default key.
 
     class-methods class_constructor.
     class-methods get_random_color

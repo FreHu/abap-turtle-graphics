@@ -9,7 +9,7 @@ class zcl_turtle_lsystem definition
         "! New string
         to   type string,
       end of lsystem_rewrite_rule,
-      lsystem_rewrite_rules type standard table of lsystem_rewrite_rule with empty key.
+      lsystem_rewrite_rules type standard table of lsystem_rewrite_rule with default key.
 
     types: lsystem_instruction_kind type string.
     constants:
@@ -65,7 +65,7 @@ class zcl_turtle_lsystem definition
     methods get_final_value
       returning value(result) type string.
 
-    types: t_position_stack type standard table of zcl_turtle=>turtle_position with empty key.
+    types: t_position_stack type standard table of zcl_turtle=>turtle_position with default key.
     methods:
       push_stack importing position type zcl_turtle=>turtle_position,
       pop_stack returning value(position) type zcl_turtle=>turtle_position.
