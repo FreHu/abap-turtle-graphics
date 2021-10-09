@@ -20,7 +20,7 @@ endclass.
 class zcl_turtle_examples implementation.
 
   method polygon_flower.
-    turtle = zcl_turtle=>new( height = 800 width = 800 title = |Polygons:{ polygons } Sides: { polygon_sides }| ).
+    turtle = zcl_turtle=>create( height = 800 width = 800 title = |Polygons:{ polygons } Sides: { polygon_sides }| ).
 
     turtle->goto( x = 200 y = 200 ).
     turtle->set_pen( value #(
@@ -47,7 +47,7 @@ class zcl_turtle_examples implementation.
   endmethod.
 
   method filled_square.
-    turtle = zcl_turtle=>new( height = 800 width = 800 ).
+    turtle = zcl_turtle=>create( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
     turtle->set_pen( value #(
@@ -72,7 +72,7 @@ class zcl_turtle_examples implementation.
 
   method polygon_using_lines.
 
-    turtle = zcl_turtle=>new( height = 800 width = 800 ).
+    turtle = zcl_turtle=>create( height = 800 width = 800 ).
     turtle->goto( x = 200 y = 200 ).
 
     turtle->set_pen( value #(

@@ -1,0 +1,43 @@
+{
+  "global": {
+    "files": "/downport/**/*.*",
+    "skipGeneratedGatewayClasses": true,
+    "skipGeneratedPersistentClasses": true,
+    "skipGeneratedFunctionGroups": true,
+    "useApackDependencies": false,
+    "exclude": [
+      ".*/zcl_turtle_output.clas.abap",
+      ".*/turtle_demo_polygons.prog.abap"
+    ]
+  },
+  "dependencies": [
+    {
+      "url": "https://github.com/open-abap/open-abap",
+      "folder": "/deps",
+      "files": "/**/*.*"
+    }
+  ],
+  "syntax": {
+    "version": "v702",
+    "errorNamespace": ""
+  },
+  "rules": {
+    "downport": true,
+    "check_syntax": true,
+    "keyword_case": {
+      "style": "lower",
+      "ignoreExceptions": false,
+      "ignoreFunctionModuleName": false,
+      "ignoreGlobalClassDefinition": false,
+      "ignoreGlobalInterface": false,
+      "ignoreLowerClassImplmentationStatement": false,
+      "ignoreGlobalClassBoundaries": false,
+      "ignoreKeywords": []
+    },
+    "indentation": true,
+    "definitions_top": true,
+    "whitespace_end": true,
+    "line_break_multiple_parameters": true,
+    "parser_error": true
+  }
+}

@@ -30,7 +30,7 @@ class zcl_turtle_svg definition
       end of circle_params.
 
     class-methods:
-      new
+      create
         importing turtle        type ref to zcl_turtle
         returning value(result) type ref to zcl_turtle_svg.
 
@@ -61,7 +61,7 @@ endclass.
 
 class zcl_turtle_svg implementation.
 
-  method new.
+  method create.
     result = new #( ).
     result->turtle = turtle.
   endmethod.

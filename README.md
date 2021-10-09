@@ -17,25 +17,54 @@ Import the repository to your system using abapGit.
 ### Turtle
 
 ```abap
-REPORT zabapturtle.
 
-DATA(turtle) = NEW zcl_turtle( height = 800 width = 800 ).
+report turtle_demo_polygons.
 
-turtle->set_pen( VALUE #( stroke_width = 2 ) ).
+initialization.
 
-turtle->goto( x = 200 y = 200 ).
-DATA(i) = 0.
-DATA(n) = 15.
-WHILE i < n.
-  turtle->polygon( num_sides = 10 side_length = 50 ).
-  turtle->right( 360 / n ).
+  parameters:
+    bgcolor  type string default `#000000`,
+    polygons type i,
+    sides    type i.
 
-  i += 1.
-ENDWHILE.
+at selection-screen output.
 
-turtle->show( ).
+  if polygons <> 0 and sides <> 0.
+
+    data(turtle) = zcl_turtle=>create( 
+      height = 800 
+      width  = 800 
+      title  = |Polygons:{ polygons } Sides: { sides }| background_color = bgcolor ).
+
+    turtle->goto( x = 400 y = 400 ).
+    turtle->set_pen( value #(
+            stroke_color = `#FF00FF`
+            stroke_width = 2 ) ).
+
+    data(current_polygon) = 0.
+    while current_polygon < polygons.
+
+      " draw a regular polygon
+      data(current_polygon_side) = 0.
+      data(side_length) = 50.
+      while current_polygon_side < sides.
+        turtle->forward( side_length ).
+        turtle->right( 360 / sides ).
+        current_polygon_side = current_polygon_side + 1.
+      endwhile.
+
+      " rotate before painting next polygon
+      turtle->right( 360 / polygons ).
+
+      current_polygon = current_polygon + 1.
+    endwhile.
+
+    zcl_turtle_output=>show( turtle ).
+
+  endif.
+
 ```
-You can also save the image using `turtle->download()`.
+You can also save the image using `zcl_turtle_output=>download( turtle )`.
 
 ![image](https://user-images.githubusercontent.com/5097067/66575607-7ac65f80-eb76-11e9-8a9c-0ccab1041d38.png)
 
@@ -93,22 +122,22 @@ See `zcl_turtle_lsystem=>instruction_kind`.
 
 
 ```abap
-DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+DATA(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
 turtle->goto( x = 200 y = 200 ).
 
 DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
-  initial_state = `F`
   instructions = VALUE #(
     ( symbol = 'F' kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
     ( symbol = '+' kind = zcl_turtle_lsystem=>instruction_kind-right amount = 90 )
     ( symbol = '-' kind = zcl_turtle_lsystem=>instruction_kind-left amount = 90 ) )
   num_iterations = 3
+  initial_state = `F`
   rewrite_rules = VALUE #(
     ( from = `F` to = `F+F-F-F+F` )
-    )
+  )
 ).
 
-DATA(lsystem) = zcl_turtle_lsystem=>new(
+DATA(lsystem) = zcl_turtle_lsystem=>create(
   turtle = turtle
   parameters = parameters ).
 
@@ -120,12 +149,11 @@ lsystem->show( ).
 
 The stack can be used to generate plants or trees:
 ```abap
-DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+DATA(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
 turtle->goto( x = 300 y = 600 ).
 turtle->set_angle( -90 ).
 
 DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
-  initial_state = `F`
   instructions = VALUE #(
     ( symbol = `F` kind = zcl_turtle_lsystem=>instruction_kind-forward amount = 10 )
     ( symbol = `+` kind = zcl_turtle_lsystem=>instruction_kind-right amount = 25 )
@@ -134,17 +162,18 @@ DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
     ( symbol = `]` kind = zcl_turtle_lsystem=>instruction_kind-stack_pop )
   )
   num_iterations = 5
+  initial_state = `F`
   rewrite_rules = VALUE #(
     ( from = `F` to = `F[+F]F[-F][F]` )
-    )
+  )
 ).
 
-DATA(lsystem) = zcl_turtle_lsystem=>new(
+DATA(lsystem) = zcl_turtle_lsystem=>create(
   turtle = turtle
   parameters = parameters ).
 
 lsystem->execute( ).
-lsystem->show( ).
+zcl_turtle_output=>show( turtle ).
 ```
 
 ![image](https://user-images.githubusercontent.com/5097067/66575734-beb96480-eb76-11e9-886a-e6641da67a0e.png)
