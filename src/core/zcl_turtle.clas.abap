@@ -35,7 +35,7 @@ class zcl_turtle definition
 
     types: multiple_turtles type standard table of ref to zcl_turtle.
 
-    class-methods new
+    class-methods create
       importing height           type i default defaults-height
                 width            type i default defaults-width
                 background_color type zcl_turtle_colors=>rgb_hex_color optional
@@ -143,7 +143,7 @@ endclass.
 
 class zcl_turtle implementation.
 
-  method new.
+  method create.
     turtle = new zcl_turtle( width = width height = height background_color = background_color title = title ).
   endmethod.
 
@@ -235,7 +235,7 @@ class zcl_turtle implementation.
     me->style = style.
     me->color_scheme = zcl_turtle_colors=>default_color_scheme.
     me->use_random_colors = abap_true.
-    me->svg_builder = zcl_turtle_svg=>new( me ).
+    me->svg_builder = zcl_turtle_svg=>create( me ).
 
     if background_color is not initial.
       me->set_pen( value #( fill_color = background_color ) ).

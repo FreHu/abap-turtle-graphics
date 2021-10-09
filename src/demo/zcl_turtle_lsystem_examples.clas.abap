@@ -13,7 +13,7 @@ class zcl_turtle_lsystem_examples implementation.
 
   method koch_curve.
 
-    data(turtle) = zcl_turtle=>new( height = 800 width = 600 title = |Koch curve| ).
+    data(turtle) = zcl_turtle=>create( height = 800 width = 600 title = |Koch curve| ).
     turtle->goto( x = 200 y = 200 ).
     data(parameters) = value zcl_turtle_lsystem=>params(
       initial_state = `F`
@@ -28,7 +28,7 @@ class zcl_turtle_lsystem_examples implementation.
       )
     ).
 
-    data(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>create(
       turtle = turtle
       parameters = parameters ).
 
@@ -38,7 +38,7 @@ class zcl_turtle_lsystem_examples implementation.
   endmethod.
 
   method pattern.
-    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    data(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
     turtle->goto( x = 200 y = 200 ).
 
     data(parameters) = value zcl_turtle_lsystem=>params(
@@ -53,7 +53,7 @@ class zcl_turtle_lsystem_examples implementation.
        )
     ).
 
-    data(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>create(
       turtle = turtle
       parameters = parameters ).
 
@@ -63,7 +63,7 @@ class zcl_turtle_lsystem_examples implementation.
   endmethod.
 
   method plant.
-    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    data(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
     turtle->goto( x = 300 y = 600 ).
     turtle->set_angle( -90 ).
 
@@ -84,7 +84,7 @@ class zcl_turtle_lsystem_examples implementation.
        )
     ).
 
-    data(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>create(
       turtle = turtle
       parameters = parameters ).
 
@@ -93,7 +93,7 @@ class zcl_turtle_lsystem_examples implementation.
   endmethod.
 
   method plant_2.
-    data(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+    data(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
     turtle->goto( x = 300 y = 600 ).
     turtle->set_angle( -90 ).
 
@@ -112,7 +112,7 @@ class zcl_turtle_lsystem_examples implementation.
        )
     ).
 
-    data(lsystem) = zcl_turtle_lsystem=>new(
+    data(lsystem) = zcl_turtle_lsystem=>create(
       turtle = turtle
       parameters = parameters ).
 

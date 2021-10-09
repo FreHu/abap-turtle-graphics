@@ -53,7 +53,7 @@ class zcl_turtle_lsystem definition
         rewrite_rules  type lsystem_rewrite_rules,
       end of params.
 
-    class-methods new
+    class-methods create
       importing turtle        type ref to zcl_turtle
                 parameters    type params
       returning value(result) type ref to zcl_turtle_lsystem.
@@ -77,7 +77,7 @@ endclass.
 
 class zcl_turtle_lsystem implementation.
 
-  method new.
+  method create.
     result = new #( ).
     result->turtle = turtle.
     result->parameters = parameters.

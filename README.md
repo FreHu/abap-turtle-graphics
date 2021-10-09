@@ -93,7 +93,7 @@ See `zcl_turtle_lsystem=>instruction_kind`.
 
 
 ```abap
-DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+DATA(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
 turtle->goto( x = 200 y = 200 ).
 
 DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
@@ -108,7 +108,7 @@ DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
   )
 ).
 
-DATA(lsystem) = zcl_turtle_lsystem=>new(
+DATA(lsystem) = zcl_turtle_lsystem=>create(
   turtle = turtle
   parameters = parameters ).
 
@@ -120,7 +120,7 @@ lsystem->show( ).
 
 The stack can be used to generate plants or trees:
 ```abap
-DATA(turtle) = zcl_turtle=>new( height = 800 width = 600 ).
+DATA(turtle) = zcl_turtle=>create( height = 800 width = 600 ).
 turtle->goto( x = 300 y = 600 ).
 turtle->set_angle( -90 ).
 
@@ -139,7 +139,7 @@ DATA(parameters) = VALUE zcl_turtle_lsystem=>params(
   )
 ).
 
-DATA(lsystem) = zcl_turtle_lsystem=>new(
+DATA(lsystem) = zcl_turtle_lsystem=>create(
   turtle = turtle
   parameters = parameters ).
 
