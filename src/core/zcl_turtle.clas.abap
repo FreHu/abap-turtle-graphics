@@ -144,32 +144,13 @@ endclass.
 class zcl_turtle implementation.
 
   method create.
-    turtle = new zcl_turtle( width = width height = height background_color = background_color title = title ).
+    data temp1 type ref to zcl_turtle.
+    create object temp1 type zcl_turtle exporting width = width height = height background_color = background_color title = title.
+    turtle = temp1.
   endmethod.
-
 
   method forward.
 
-    data(old_position) = position.
-    data(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
-    data(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
-
-    data(new_position) = value turtle_position(
-      x = old_position-x + new_x
-      y = old_position-y + new_y
-      angle = old_position-angle ).
-
-    if pen-is_up = abap_false.
-      me->line(
-        x_from = old_position-x
-        y_from = old_position-y
-        x_to = new_position-x
-        y_to = new_position-y ).
-    endif.
-
-    me->set_position( new_position ).
-
-    turtle = me.
   endmethod.
 
   method back.
@@ -195,18 +176,6 @@ class zcl_turtle implementation.
   endmethod.
 
   method line.
-
-    if use_random_colors = abap_true.
-      pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
-    endif.
-
-    append_svg( svg_builder->line( value #(
-      x_from = x_from
-      y_from = y_from
-      x_to = x_to
-      y_to = y_to ) ) ).
-
-    turtle = me.
   endmethod.
 
   method right.
@@ -229,35 +198,6 @@ class zcl_turtle implementation.
   endmethod.
 
   method constructor.
-    me->width = width.
-    me->height = height.
-    me->title = title.
-    me->style = style.
-    me->color_scheme = zcl_turtle_colors=>default_color_scheme.
-    me->use_random_colors = abap_true.
-    me->svg_builder = zcl_turtle_svg=>create( me ).
-
-    if background_color is not initial.
-      me->set_pen( value #( fill_color = background_color ) ).
-      data(side_length) = 100.
-
-      data(points) = value t_points(
-        ( x = 0 y = 0 )
-        ( x = 0 + width y = 0 )
-        ( x = 0 + width y = 0 + height )
-        ( x = 0   y = 0 + height )
-      ).
-
-      me->append_svg(
-        me->svg_builder->polyline( value #( points = points ) )
-      ).
-    endif.
-
-    me->pen = value #(
-     stroke_width = 1
-     stroke_color = `#FF0000`
-     is_up = abap_false
-   ).
   endmethod.
 
   method get_position.
@@ -277,41 +217,6 @@ class zcl_turtle implementation.
   endmethod.
 
   method download.
-
-    data(file_name) = filename.
-    data(path) = ``.
-    data(full_path) = ``.
-
-    cl_gui_frontend_services=>file_save_dialog(
-      exporting
-        default_extension = `html`
-        default_file_name = filename
-        initial_directory = ``
-      changing
-        filename = file_name
-        path = path
-        fullpath = full_path
-      exceptions
-        others = 1 ).
-
-    if sy-subrc <> 0.
-      message id sy-msgid type sy-msgty number sy-msgno
-              with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
-    endif.
-
-    split me->get_html( ) at |\r\n| into table data(lines).
-    cl_gui_frontend_services=>gui_download(
-      exporting
-        filename = file_name
-      changing
-        data_tab = lines
-      exceptions others = 1 ).
-
-    if sy-subrc <> 0.
-      message id sy-msgid type sy-msgty number sy-msgno
-        with sy-msgv1 sy-msgv2 sy-msgv3 sy-msgv4.
-    endif.
-
   endmethod.
 
   method get_html.
@@ -340,17 +245,6 @@ class zcl_turtle implementation.
   endmethod.
 
   method from_existing.
-    turtle = new #(
-      width = existing_turtle->width
-      height = existing_turtle->height
-      title = existing_turtle->title
-      style = existing_turtle->style
-    ).
-
-    turtle->set_pen( existing_turtle->pen ).
-    turtle->set_color_scheme( existing_turtle->color_scheme ).
-    turtle->set_position( existing_turtle->position ).
-    turtle->set_angle( existing_turtle->position-angle ).
   endmethod.
 
   method append_svg.
@@ -358,31 +252,6 @@ class zcl_turtle implementation.
   endmethod.
 
   method compose.
-
-    if lines( turtles ) < 1.
-      zcx_turtle_problem=>raise( `Not enough turtles to compose anything.` ).
-    endif.
-
-    " start where the last one left off
-    turtle = zcl_turtle=>from_existing( turtles[ lines( turtles ) ] ).
-
-    " new image size is the largest of composed turtles
-    data(new_width) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->width ) ) ).
-
-    data(new_height) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->height ) ) ).
-
-    turtle->set_height( new_height ).
-    turtle->set_width( new_width ).
-
-    data(composed_svg) = reduce string(
-      init result = ``
-        for <svg> in value stringtab( for <x> in turtles ( <x>->svg ) )
-      next result = result && <svg> ).
-
-    turtle->append_svg( composed_svg ).
-
   endmethod.
 
   method set_width.
