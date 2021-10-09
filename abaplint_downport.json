@@ -6,7 +6,8 @@
     "skipGeneratedFunctionGroups": true,
     "useApackDependencies": false,
     "exclude": [
-      "/src/utils/zcl_turtle_output.clas.abap"
+      ".*/zcl_turtle_output.clas.abap",
+      ".*/turtle_demo_polygons.prog.abap"
     ]
   },
   "dependencies": [

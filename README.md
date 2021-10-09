@@ -173,7 +173,7 @@ DATA(lsystem) = zcl_turtle_lsystem=>create(
   parameters = parameters ).
 
 lsystem->execute( ).
-lsystem->show( ).
+zcl_turtle_output=>show( turtle ).
 ```
 
 ![image](https://user-images.githubusercontent.com/5097067/66575734-beb96480-eb76-11e9-886a-e6641da67a0e.png)
