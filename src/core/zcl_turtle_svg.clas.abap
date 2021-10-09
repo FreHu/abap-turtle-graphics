@@ -62,7 +62,9 @@ endclass.
 class zcl_turtle_svg implementation.
 
   method create.
-    result = new #( ).
+    data temp1 type ref to undefined.
+    create object temp1.
+    result = temp1.
     result->turtle = turtle.
   endmethod.
 
@@ -72,7 +74,8 @@ class zcl_turtle_svg implementation.
   endmethod.
 
   method polygon.
-    data(point_data) = reduce string(
+    data point_data type string.
+    point_data = reduce string(
       init res = ||
       for point in params-points
       next res = res && |{ point-x },{ point-y } | ).
@@ -84,7 +87,8 @@ class zcl_turtle_svg implementation.
   endmethod.
 
   method polyline.
-    data(point_data) = reduce string(
+    data point_data type string.
+    point_data = reduce string(
       init res = ||
       for point in params-points
       next res = res && |{ point-x },{ point-y } | ).
