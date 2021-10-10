@@ -4,7 +4,7 @@
     "downport": "rm -rf downport && cp src -r downport && abaplint --fix abaplint_downport.json"
   },
   "devDependencies": {
-    "@abaplint/cli": "^2.79.23",
+    "@abaplint/cli": "^2.79.26",
     "@abaplint/runtime": "^1.6.39",
     "@abaplint/transpiler-cli": "^1.6.39"
   }
