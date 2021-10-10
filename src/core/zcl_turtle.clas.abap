@@ -319,10 +319,10 @@ class zcl_turtle implementation.
 
     " new image size is the largest of composed turtles
     data(new_width) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->width ) ) ).
+      value #( for <w> in turtles ( <w>->width ) ) ).
 
     data(new_height) = zcl_turtle_math=>find_max_int(
-      value #( for <x> in turtles ( <x>->height ) ) ).
+      value #( for <h> in turtles ( <h>->height ) ) ).
 
     turtle->set_height( new_height ).
     turtle->set_width( new_width ).
