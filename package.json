@@ -1,7 +1,8 @@
 {
   "scripts": {
     "lint": "abaplint",
-    "downport": "rm -rf downport && cp src -r downport && abaplint --fix abaplint_downport.json"
+    "downport": "rm -rf downport && cp src -r downport && abaplint --fix abaplint_downport.json || true  && abaplint --fix abaplint_downport.json",
+    "unit": "rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs"
   },
   "devDependencies": {
     "@abaplint/cli": "^2.79.26",
