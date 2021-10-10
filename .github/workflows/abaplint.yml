@@ -1,0 +1,35 @@
+name: abaplint
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  abaplint:
+    name: abaplint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/checkout@v2
+      - name: Run abaplint
+        run: |
+          npm install
+          npm run lint
+
+  downport:
+    name: donwport
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: actions/checkout@v2
+      - name: Abaplint - downport
+        run: |
+          npm install
+          npm run downport
