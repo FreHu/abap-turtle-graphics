@@ -37,6 +37,7 @@
     },
     "indentation": true,
     "line_break_multiple_parameters": true,
-    "parser_error": true
+    "parser_error": true,
+    "definitions_top": true
   }
 }
