@@ -5,7 +5,7 @@
     "unit": "rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs"
   },
   "devDependencies": {
-    "@abaplint/cli": "^2.79.26",
+    "@abaplint/cli": "^2.79.27",
     "@abaplint/runtime": "^1.6.39",
     "@abaplint/transpiler-cli": "^1.6.39"
   }
