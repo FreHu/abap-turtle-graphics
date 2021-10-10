@@ -1,7 +1,7 @@
 {
   "scripts": {
     "lint": "abaplint",
-    "downport": "rm -rf downport && cp src -r downport && abaplint --fix abaplint_downport.json || true  && abaplint --fix abaplint_downport.json",
+    "downport": "rm -rf downport && cp src -r downport && abaplint --fix abaplint_downport.json || true  && abaplint --fix abaplint_downport.json && rm downport/utils/zcl_turtle_output.clas.* && rm downport/demo/turtle_demo_polygons.prog.* && rm downport/zcl_turtle_apack_manifest.clas.*",
     "unit": "rm -rf output && abap_transpile abap_transpile.json && echo RUNNING && node output/index.mjs"
   },
   "devDependencies": {
