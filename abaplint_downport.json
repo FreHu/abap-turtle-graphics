@@ -7,7 +7,8 @@
     "useApackDependencies": false,
     "exclude": [
       ".*/zcl_turtle_output.clas.abap",
-      ".*/turtle_demo_polygons.prog.abap"
+      ".*/turtle_demo_polygons.prog.abap",
+      ".*/zcl_turtle_apack_manifest.clas.abap"
     ]
   },
   "dependencies": [
