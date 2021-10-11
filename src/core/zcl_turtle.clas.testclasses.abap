@@ -62,7 +62,7 @@ class lcl_tests implementation.
     turtle->goto( x = 150 y = 0 ).
     turtle->forward( 100 ).
 
-    cl_abap_unit_assert=>assert_equals( exp = 100 act = turtle->position-x ).
+    cl_abap_unit_assert=>assert_equals( exp = 150 + 100 act = turtle->position-x ).
     cl_abap_unit_assert=>assert_equals( exp = 0 act = turtle->position-y ).
 
   endmethod.
