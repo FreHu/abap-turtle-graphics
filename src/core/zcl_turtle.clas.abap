@@ -148,8 +148,6 @@ class zcl_turtle implementation.
     data(old_position) = position.
     data(new_x) = how_far * cos( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
     data(new_y) = how_far * sin( zcl_turtle_convert=>degrees_to_radians( old_position-angle ) ).
-    new_x = round( val = new_x dec = 0 ).
-    new_y = round( val = new_y dec = 0 ).
 
     data(new_position) = value turtle_position(
       x = old_position-x + new_x
