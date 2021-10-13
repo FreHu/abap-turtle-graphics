@@ -195,11 +195,12 @@ class zcl_turtle implementation.
       pen-stroke_color = zcl_turtle_colors=>get_random_color( me->color_scheme ).
     endif.
 
-    append_svg( svg_builder->line( value #(
+    data(line) = svg_builder->line( value #(
       x_from = x_from
       y_from = y_from
       x_to = x_to
-      y_to = y_to ) ) ).
+      y_to = y_to ) ).
+    append_svg( line ).
 
     turtle = me.
   endmethod.
@@ -235,9 +236,8 @@ class zcl_turtle implementation.
         ( x = 0   y = 0 + height )
       ).
 
-      me->append_svg(
-        me->svg_builder->polyline( value #( points = points ) )
-      ).
+      data(polyline) = me->svg_builder->polyline( value #( points = points ) ).
+      me->append_svg( polyline ).
     endif.
 
     me->pen = value #(

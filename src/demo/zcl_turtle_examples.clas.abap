@@ -65,9 +65,8 @@ class zcl_turtle_examples implementation.
       ( x = start-x y = start-y + side_length )
     ).
 
-    turtle->append_svg(
-      turtle->svg_builder->polyline( value #( points = points ) )
-    ).
+    data(polyline) = turtle->svg_builder->polyline( value #( points = points ) ).
+    turtle->append_svg( polyline ).
   endmethod.
 
   method polygon_using_lines.
