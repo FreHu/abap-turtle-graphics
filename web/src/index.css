@@ -17,6 +17,10 @@ body, html, .inner, .outer {
   bottom: 5px;
 }
 
+.hidden {
+  display: none;
+}
+
 .container {
   overflow: hidden;
 }
@@ -25,11 +29,11 @@ body, html, .inner, .outer {
   cursor: col-resize;
 }
 
-#gutter1 {
+#abap-editor-gutter {
   grid-area: 1 / 2 / 1 / 2;
 }
 
-#gutter2 {
+#js-editor-gutter {
   grid-area: 1 / 4 / 1 / 4;
 }
 

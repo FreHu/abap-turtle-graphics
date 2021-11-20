@@ -24,8 +24,8 @@ const reg = new abaplint.Registry(new abaplint.Config(JSON.stringify(config)));
 abapMonaco.registerABAP(reg);
 
 const filename = "file:///zfoobar.prog.abap";
-const model1 = monaco.editor.createModel(
-  "WRITE 'hello'.",
+const abapModel = monaco.editor.createModel(
+  `WRITE '<svg width="150" height="150"><circle cx="50" cy="50" r="50"></circle></svg>'.`,
   "abap",
   monaco.Uri.parse(filename),
 );
@@ -35,24 +35,24 @@ Split({
   columnGutters: [
     {
       track: 1,
-      element: document.getElementById("gutter1"),
+      element: document.getElementById("abap-editor-gutter"),
     },
     {
       track: 3,
-      element: document.getElementById("gutter2"),
+      element: document.getElementById("js-editor-gutter"),
     },
   ],
 });
 
-const editor1 = monaco.editor.create(document.getElementById("container1"), {
-  model: model1,
+const abapEditor = monaco.editor.create(document.getElementById("abap-editor-container"), {
+  model: abapModel,
   theme: "vs-dark",
   minimap: {
     enabled: false,
   },
 });
 
-const editor2 = monaco.editor.create(document.getElementById("container2"), {
+const jsEditor = monaco.editor.create(document.getElementById("js-editor-container"), {
   value: "js",
   theme: "vs-dark",
   minimap: {
@@ -61,20 +61,9 @@ const editor2 = monaco.editor.create(document.getElementById("container2"), {
   language: "javascript",
 });
 
-const editor3 = monaco.editor.create(document.getElementById("container3"), {
-  value: "output",
-  theme: "vs-dark",
-  minimap: {
-    enabled: false,
-  },
-  readOnly: true,
-  language: "text",
-});
-
 function updateEditorLayouts() {
-  editor1.layout();
-  editor2.layout();
-  editor3.layout();
+  abapEditor.layout();
+  jsEditor.layout();
 }
 
 const observer = new MutationObserver(mutations => {
@@ -100,42 +89,54 @@ const AsyncFunction = new Function(`return Object.getPrototypeOf(async function(
 
 async function jsChanged() {
   const makeGlobal = "abap = abapLocal;\n";
-  const js = makeGlobal + editor2.getValue();
+  const js = makeGlobal + jsEditor.getValue();
+  const output = document.getElementById("svg-container");
   try {
     abap.console.clear();
     try {
       const f = new AsyncFunction("abapLocal", js);
       await f(abap);
-      editor3.setValue(abap.console.get());
+      output.innerHTML = abap.console.get();
     } catch(e) {
-      // write all errors to runtime result
-      editor3.setValue("An error was thrown: " + e.toString());
+      showError("An error was thrown: " + e.toString());
     }
   } catch (error) {
-    editor3.setValue(error.message);
-    console.dir(error);
+    showError(error.message);
   }
 }
 
 async function abapChanged() {
   try {
-    const contents = editor1.getValue();
+    hideError();
+    const contents = abapEditor.getValue();
     const file = new abaplint.MemoryFile(filename, contents);
     reg.updateFile(file);
     reg.parse();
-    abapMonaco.updateMarkers(reg, model1);
+    abapMonaco.updateMarkers(reg, abapModel);
 
     const res = await new Transpiler().runRaw([{filename, contents}]);
-    editor2.setValue(res.objects[0].chunk.getCode() || "");
+    jsEditor.setValue(res.objects[0].chunk.getCode() || "");
   } catch (error) {
-    editor2.setValue("");
-    editor3.setValue(error.message);
-    console.dir(error);
+    jsEditor.setValue("");
+    showError(error);
   }
 }
 
-editor1.onDidChangeModelContent(abapChanged);
-editor2.onDidChangeModelContent(jsChanged);
+abapEditor.onDidChangeModelContent(abapChanged);
+jsEditor.onDidChangeModelContent(jsChanged);
 abapChanged();
-editor1.focus();
+abapEditor.focus();
 const abap = new ABAP();
+
+function showError(error: any) {
+  const output = document.getElementById("error-banner");
+  output.classList.remove("hidden");
+  const errorDiv = document.getElementById("error-message");
+  errorDiv.innerHTML = error.message;
+  console.dir(error);
+}
+
+function hideError(){
+  const output = document.getElementById("error-banner");
+  output.classList.add("hidden");
+}
